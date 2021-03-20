@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/HDestination.css'
+import styles from '../styles/Home.module.css'
 
 class HDestination extends React.Component {
 
@@ -10,14 +10,14 @@ class HDestination extends React.Component {
       const cost = this.props.cost;
       const avantage = this.props.avantage;
       return (
-          <div className="HDestination">
-            <div className="HDestination-Divpicture">
-              <img src={src} alt="logo" className="HDestination-picture" />
+          <div className={styles.HDestination}>
+            <div className={styles.HDestinationDivpicture}>
+              <img src={src} alt="logo" className={styles.HDestinationPicture} />
             </div>
-            <div className="HDestination-cityName">
-                <p className="HDestination-txt">{name}</p>
+            <div className={styles.HDestinationCityName}>
+                <p className={styles.HDestinationTxt}>{name}</p>
             </div>
-            <div className="HDestination-cost">
+            <div className={styles.HDestinationCost}>
               <p>
                       Duree : {duree}<br/>
                       Coût  : {cost}<br/>
