@@ -21,7 +21,6 @@ export default class Presentation extends React.Component {
           <p className= "max-w-prose mx-auto text-white italic font-bold"> Retrouvez des milliers de destinations de rêves selon vos envies </p>
           </div>
           </section>
-          <Hfiltre/>
           <section class="p-4 block">
               <div class="container mx-auto m-0 relative">
                   <h2 class={styles.title_1}>Présentation </h2><br/>
