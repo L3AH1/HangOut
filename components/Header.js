@@ -49,7 +49,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="py-2 px-4">
-                <Link href="/Presentation">
+                <Link href="/presentation">
                   <a>Présentation</a>
                 </Link>
               </li>
