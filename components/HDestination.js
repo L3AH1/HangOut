@@ -10,26 +10,23 @@ class HDestination extends React.Component {
       const cost = this.props.cost;
       const avantage = this.props.avantage;
       return (
-          <div className={styles.HDestination}>
-            <div className={styles.HDestinationDivpicture}>
-              <img src={src} alt="logo" className={styles.HDestinationPicture} />
+          <div className="bg-white flex flex-col justify-stretch border-solid border-2 border-black rounded-2xl max-w-xs max-h-xs">
+            <div className="rounded-t-2xl h-28 flex-7 flex justify-center">
+              <img src={src} alt="logo" className="rounded-t-2xl max-h-full max-w-full" />
             </div>
-            <div className={styles.HDestinationCityName}>
-                <p className={styles.HDestinationTxt}>{name}</p>
+            <div className="text-center text-yellow-500 py-0 border-solid border-2 border-r-0 border-l-0 border-black flex-1">
+                <p className="font-bold text-lg m-0 p-0 font-sans">{name}</p>
             </div>
-            <div className={styles.HDestinationCost}>
+            <div className="text-black text-sm text-left ml-3 flex-3 flex align-center">
               <p>
-                      Duree : {duree}<br/>
-                      Coût  : {cost}<br/>
-                      Avantage : {avantage}<br/>
+                Duree    : {duree}<br/>
+                Coût     : {cost}<br/>
+                Avantage : {avantage}
               </p>
             </div >
-            
-              
           </div>
       );
     }
   }
 
 export default HDestination;
-
