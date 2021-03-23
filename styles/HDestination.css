@@ -1,0 +1,52 @@
+.HDestination {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    border-radius: 10%;
+    border: 2px solid;
+    border-color: black;
+    height: 300px;
+    width: 200px;
+    margin-left: 10px;
+}
+
+.HDestination-Divpicture {
+    border-top-right-radius: 10%;
+    border-top-left-radius: 10%;
+    height: 100px;
+    flex: 7;
+}
+
+.HDestination-picture {
+    border-top-right-radius: 10%;
+    border-top-left-radius: 10%;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.HDestination-cityName {
+    font-family: 'Trebuchet MS';
+    text-align: center;
+    color : black;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: 2px solid;
+    border-left:0;
+    border-right: 0;
+    flex: 1;
+}
+
+.HDestination-cost {
+    color: black;
+    font-size: small;
+    text-align: left;
+    margin-left: 10%;
+    flex: 3;
+}
+
+.HDestination-txt {
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}

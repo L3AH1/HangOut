@@ -54,6 +54,11 @@ export default function Header() {
                 </Link>
               </li>
               <li className="py-2 px-4">
+                <Link href="/login">
+                  <a>Login</a>
+                </Link>
+              </li>
+              <li className="py-2 px-4">
                 <Link href="/aide">
                   <a>Aide</a>
                 </Link>
