@@ -1,10 +1,12 @@
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
+import HPopup from "./ConnectPopup";
+import "react-responsive-modal/styles.css";
 
 export default function Header() {
   return (
-    <header className="container max-w-4xl mx-auto">
+    <header className="px-4">
       <Head>
         <link
           rel="apple-touch-icon"
@@ -35,7 +37,7 @@ export default function Header() {
       <div className="flex items-center justify-between">
         <div id="logo">
           <a href="#" className="inline-block py-2 px-4 text-xl font-bold">
-            Hang<span className="text-yellow-500">Out</span>
+          <img className="logo h-10" src="Logo.svg"/>
           </a>
         </div>
         <div>
@@ -52,14 +54,17 @@ export default function Header() {
                 </Link>
               </li>
               <li className="py-2 px-4">
-                <Link href="/HSecondary">
+                <Link href="/login">
                   <a>Login</a>
                 </Link>
               </li>
               <li className="py-2 px-4">
-                <Link href="/">
+                <Link href="/aide">
                   <a>Aide</a>
                 </Link>
+              </li>
+              <li className="py-2 px-4" style={{backgroundColor: "Orange", borderRadius: 10}}>
+                  <HPopup>Connexion</HPopup>
               </li>
             </ul>
           </nav>

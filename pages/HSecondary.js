@@ -1,6 +1,6 @@
 import Header from "../components/Header"
 import Head from "next/head"
-import HDestination from "../components/HDestination"
+import HInfoDestination from "../components/HInfoDestination"
 import styles from '../styles/Home.module.css'
 
 const Line = () => (
@@ -193,13 +193,13 @@ export default function HSecondary() {
                             </div>
                         </div>
                         <div className="flex justify-center p-2">
-                            <HDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
+                            <HInfoDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
                         </div>
                         <div className="flex justify-center p-2">
-                            <HDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
+                            <HInfoDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
                         </div>
                         <div className="flex justify-center p-2">
-                            <HDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
+                            <HInfoDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
                         </div>   
                     </div>
                     <Line className="flex-1"/>
@@ -213,13 +213,13 @@ export default function HSecondary() {
                             </div>
                         </div>
                         <div className="flex justify-center p-2">
-                            <HDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
+                            <HInfoDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
                         </div>
                         <div className="flex justify-center p-2">
-                            <HDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
+                            <HInfoDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
                         </div>
                         <div className="flex justify-center p-2">
-                            <HDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
+                            <HInfoDestination src="https://images.unsplash.com/photo-1575540121783-60f174302cc2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1410&q=80" name="Monaco"/>
                         </div>   
                     </div>
 
