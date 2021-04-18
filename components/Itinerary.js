@@ -60,6 +60,7 @@ class Itinerary extends React.Component {
 
   /**
    * Hides the road sheet where there are all the details of the itinerary
+   * @function
    */
   closeRoadsheet(index){
     let button = document.getElementsByClassName("closeRoadsheet")[index];
@@ -74,6 +75,7 @@ class Itinerary extends React.Component {
 
   /**
    * Saves the data to database
+   * @function
    */
   saveData() {
     console.log(this.state.itinerary);
