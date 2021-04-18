@@ -308,7 +308,7 @@ class Itinerary extends React.Component {
               <div className="roadsheet overflow-auto px-5 h-0">
                 <p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
                   <i className="text-yellow-500 text-bold">
-                    {this.state.itinerary.length > 0 && " " +  this.state.itinerary[1].names.join(" ")}
+                    {this.state.itinerary.length > 1 && " " +  this.state.itinerary[1].names.join(" ")}
                   </i> :
                 </p>
               </div>
@@ -322,7 +322,7 @@ class Itinerary extends React.Component {
               <div className="roadsheet overflow-auto px-5 h-0">
                 <p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
                   <i className="text-yellow-500 text-bold">
-                    {this.state.itinerary.length > 0 && " " +  this.state.itinerary[2].names.join(" ")}
+                    {this.state.itinerary.length > 2 && " " +  this.state.itinerary[2].names.join(" ")}
                   </i> :
                 </p>
               </div>
