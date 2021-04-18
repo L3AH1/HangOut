@@ -1,3 +1,4 @@
+import {VILLES} from "./Ville";
 
 export let variableFormulaire = {
   ville: "",
@@ -8,54 +9,28 @@ export let variableFormulaire = {
   duree: "",
 };
 
-export let villes =[
-  "Paris"
-  ,"Marseille"
-  ,"Lyon"
-  ,"Toulouse"
-  ,"Nice"
-  ,"Nantes"
-  ,"Montpellier"
-  ,"Strasbourg"
-  ,"Bordeaux"
-  , "Lille"
-  , "Rennes"
-  , "Reims"
-  , "Saint-Étienne"
-  , "Le Havre"
-  , "Toulon"
-  , "Grenoble"
-  , "Dijon"
-  , "Angers"
-  , "Nîmes"
-  , "Villeurbanne"
-];
+export let villes = [];
+for(let key in VILLES){
+  villes.push(VILLES[key].name);
+}
+
 villes = villes.sort();
 
 export let envies = [
-  "Soleil",
-  "Animaux",
-  "Romantisme",
-  "Nature",
-  "Beau temps",
   "Tourisme",
-  "Sports",
+  "Nature",
+  "Météo avantageuse",
   "Sports d'hiver",
   "Sports nautiques",
-  "Escapades",
-  "Plongée",
-  "Randonnée"
 ];
 
 envies = envies.sort();
 
 export let environnements = [
-  "Plage",
   "Ville",
+  "Plage",
   "Campagne",
-  "Iles",
   "Montagne",
-  "Désert",
 ]
 
 environnements = environnements.sort();

@@ -1,13 +1,15 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
 import Footer from "../components/HFooter";
+import { useRouter } from "next/router";
+import Head from "next/head";
 
 export default function signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
+  const router = useRouter();
 
   const handleUsernameChange = useCallback(
     (event) => {
@@ -38,7 +40,6 @@ export default function signup() {
   );
 
   const handleSubmit = (event) => {
-
     event.preventDefault();
 
     if (!username || !email || !password1 || !password2) {
@@ -77,12 +78,24 @@ export default function signup() {
       body: JSON.stringify(body), // convertit un objet en string
     })
       .then((res) => res.json())
-      .then((res) => alert("Bravo ! Vous êtes inscrit 🤗"));
+      .then((res) => {
+        console.log(res);
+        if (res.error) {
+          if (res.errorName === "EMAIL_ALREADY_USED") {
+            alert("Adresse email déja utilisée");
+          }
+        } else {
+          alert("Bravo ! Vous êtes inscrit 🤗 \nConnectez-vous maintenant ! 😉");
+          router.push("/signin");
+        }
+      });
   };
 
   return (
     <div>
-      <Navbar />
+      <Head>
+        <title>Inscription</title>
+      </Head>
       <div className="flex md:flex-row min-h-screen text-center">
         <div className="px-8 py-12 w-full md:w-auto">
           <div className="mb-12">
@@ -91,7 +104,7 @@ export default function signup() {
             </h2>
           </div>
           <div className>
-            <form onsubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="uppercase text-sm font-bold block mb-2 ">
                   Nom d'utilisateur
@@ -159,15 +172,9 @@ export default function signup() {
                 />
               </div>
               <div className="mb-4">
-                <input
-                  type="checkbox"
-                  name="remind"
-                  id="remind"
-                  className="mr-2"
-                  required
-                />
                 <label htmlFor="remind">
-                  J'accepte les{" "}
+                  En vous inscrivant,
+                  <br /> vous acceptez les{" "}
                   <a className="text-blue-600" href="/CGU">
                     Conditions Générales d'Utilisation
                   </a>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
 import styles from "../styles/Aide.module.css";
 import HFooter from "../components/HFooter";
+import style from "../styles/Home.module.css";
 
 const QUESTIONS = [
   {
@@ -9,9 +9,11 @@ const QUESTIONS = [
     answer: (
       <div>
         <p className="text-justify">
-        Les destinations sont tout d'abord choisies par des algorithmes à l'aide des informations
-          que vous rentrez dans le formulaire de la page d'accueil. De là, HangOut recherche des itinéraires
-          en train et en voiture à l'aide de deux APIs : Navitia et ViaMichelin.
+          Les destinations sont choisies grâce à notre algorithme et à
+          l'aide des informations que vous rentrez dans le formulaire de la page
+          d'accueil. De là, HangOut recherche des itinéraires en train et en
+          voiture et vous propose de les consulter à l'aide de, principalement, 
+          deux APIs : Navitia et ViaMichelin.
         </p>
       </div>
     ),
@@ -21,10 +23,11 @@ const QUESTIONS = [
     answer: (
       <div>
         <p className="text-justify">
-          Les villes dans lesquelles la recherche est possible sont toutes des villes
-          françaises choisies par les auteurs du site. Les auteurs ont cherché les 
-          grandes villes françaises ainsi que d'autres villes moins conséquentes mais
-          touristiques. Pour tout ajout de villes n'hésitez pas à nous envoyer un mail.
+          Les villes qui vont sont proposées font parties d'une sélection de 
+          villes francaises, jugées idéales pour partir en vacances selon les 
+          auteurs du site. Chacunes d'entre elles possèdent des avantages propres, 
+          vous pouvez les consulter à tout moment lors de votre recherche ou sur 
+          la page de propositions de destinations.
         </p>
       </div>
     ),
@@ -34,10 +37,11 @@ const QUESTIONS = [
     answer: (
       <div>
         <p className="text-justify">
-          Malheureusement l'API qui nous fournit les voyages en train, ne nous fournit pas
-          les prix des trajets. Le prix est donc calculé à l'aide d'une autre API qui parfois
-          ne coincide pas avec le trajet. Ce qui explique que le prix manque parfois.
-          Par ailleurs les prix sont indiqués à titre indicatif d'après les données de la SNCF.
+          Les prix des trains dépendent de nombreux facteurs ( durée de trajet, 
+          siège de train, heure de départ , etc...). HangOut s'engage donc à
+          vous fournir des prix de trajets estimés lorsque ceux-ci le permettent.
+          Nous vous invitons donc, une fois votre trajet planifié, de visiter les 
+          sites de réservation de billets de trains pour partir en toute sérénité.
         </p>
       </div>
     ),
@@ -47,9 +51,10 @@ const QUESTIONS = [
     answer: (
       <div>
         <p className="text-justify">
-          Le compte utilisateur vous permet de sauvegarder vos voyages pour les revoir plus tard.
-          HangOut s'engage à respecter les normes de confidentialité, ne vous demande quasiment
-          aucune donnée personnelle et ne les conserve pas.
+          HangOut met à votre disposition un compte utilisateur afin que vous 
+          puissiez sauvegarder vos voyage planifiés et les retrouver jusqu'au 
+          jour de votre départ. Nous nous engageons, également, à respecter 
+          votre vie privée ainsi que les normes de confidentialité.
         </p>
       </div>
     ),
@@ -59,11 +64,11 @@ const QUESTIONS = [
     answer: (
       <div>
         <p className="text-justify">
-        Ce site a été réalisé dans le cadre d'un projet de programmation lors de
-          la 3e année de la Licence Informatique de l'Université de Paris. Les quatre auteurs
-          du site sont tous des étudiants de cette licence : Amine Hamoudi, Wendy Randriamanampisoa, 
-          Nilam De Oliveira-Gill, Sinda Abbassi.
-          Ce projet est encadré par Maxime Lhoumeau.
+          Ce site a été réalisé dans le cadre d'un projet universitaire lors
+          de notre 3e année de la Licence Informatique de l'Université de Paris.
+          Les quatre auteurs du site sont tous étudiants de cette licence :
+          HAMOUDI Amine, RANDRIAMANAMPISOA Wendy, DE OLIVEIRA-GILL Nilam et ABBASSI 
+          Sinda. Ce projet est encadré par M. LHOUMEAU Maxime.
         </p>
       </div>
     ),
@@ -73,8 +78,10 @@ const QUESTIONS = [
     answer: (
       <div>
         <p className="text-justify">
-          En cas de souci d'affichage, de souci au niveau des requêtes ou bien si une erreur persiste,
-          n'hésitez pas à nous contacter à l'adresse e-mail ci-dessus.
+          Si vous rencontrez un problème lors de l'utilisation de l'application 
+          ou si vous avez des questions concernant l'utilisation de celle-ci,
+          n'hésitez pas à nous contacter à l'adresse e-mail ci-dessus. Nous 
+          tâcherons de vous répondre dans les plus brefs delais.
         </p>
       </div>
     ),
@@ -83,7 +90,7 @@ const QUESTIONS = [
 
 const Arrow = () => {
   return (
-    <svg class="w-6 h-6" viewBox="0 0 24 24">
+    <svg className="w-6 h-6" viewBox="0 0 24 24">
       <path
         fill="currentColor"
         d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
@@ -101,28 +108,31 @@ function Expandable({ question, answer }) {
         className="p-2 hover:bg-gray-200 flex items-center justify-between mb-2 border-b-2 border-blue-600"
         onClick={() => setOpen(!open)}
       >
-        <h4 className="h-10">{question}</h4>
+        <h4 className="h-10 font-bold">{question}</h4>
 
         <div className={open ? "transform rotate-180" : "tranform rotate-0"}>
           <Arrow />
         </div>
       </div>
 
-      {open && <div className="p-2">{answer}</div>}
+      {open && <div className="p-1">{answer}</div>}
     </div>
   );
 }
 
 function FAQ() {
   return (
-    <div className="container mx-auto max-w-4xl">
-      <h2 className="text-black font-bold p-5 text-xl">Foire aux Questions</h2>
-
-      <div className="grid lg:grid-cols-3 gap-4">
-        {QUESTIONS &&
-          QUESTIONS.map(({ question, answer }) => (
-            <Expandable question={question} answer={answer} />
-          ))}
+    <div className={style.herohelp + " pb-12"}>
+      <h2 className="text-yellow-400 font-bold p-5 text-3xl ml-4">
+        Foire aux Questions
+      </h2>
+      <div className="container mx-auto max-w-4xl">
+        <div className="grid lg:grid-cols-3 gap-4 ">
+          {QUESTIONS &&
+            QUESTIONS.map(({ question, answer }, index) => (
+              <Expandable key={index} question={question} answer={answer} />
+            ))}
+        </div>
       </div>
     </div>
   );
@@ -132,12 +142,11 @@ export default class aide extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
         <main>
           <section className={styles.Hero + " text-white"}>
             <div className="bg-black bg-opacity-50">
               <div className="container mx-auto max-w-4xl py-24 px-4">
-                <h1 class="text-4xl font-bold mb-4 text-white">
+                <h1 className="text-4xl font-bold mb-4 text-white">
                   Besoin d'aide ?
                 </h1>
 
@@ -145,7 +154,10 @@ export default class aide extends React.Component {
                   <p className="text-lg max-w-prose">
                     N'hésitez pas à nous envoyer un message à l'adresse suivante
                     :<br />
-                    <a href="mailto:hangout.teamcontact@gmail.com" className="font-bold text-blue-800">
+                    <a
+                      href="mailto:hangout.teamcontact@gmail.com"
+                      className="font-bold text-blue-800"
+                    >
                       hangout.teamcontact@gmail.com
                     </a>
                     <br />
@@ -161,7 +173,7 @@ export default class aide extends React.Component {
           <FAQ />
         </main>
 
-        <HFooter/>
+        <HFooter />
       </div>
     );
   }

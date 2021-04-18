@@ -1,4 +1,5 @@
 import React from 'react';
+import HFooter from "../components/HFooter";
 
 export default function CGU() {
     return (
@@ -175,6 +176,7 @@ export default function CGU() {
           <ul>
             <li>By email: hangout.teamcontact@gmail.com</li>
           </ul>
+          <HFooter/>
         </div>
       );
 }

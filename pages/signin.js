@@ -1,20 +1,14 @@
 import React, { useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
 import Footer from "../components/HFooter";
+import Head from "next/head";
+import Cookies from "js-cookie";
 
 export default function signin({ setLoginEmail }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-
-  const handleClick = (e) => {
-    e.preventDefault();
-    console.log(setLoginEmail);
-    setLoginEmail(email);
-    router.push("/account");
-  };
 
   const handleEmailChange = useCallback(
     (event) => {
@@ -71,15 +65,18 @@ export default function signin({ setLoginEmail }) {
         }
 
         if (res.success) {
-          setLoginEmail(email)
-          router.push("/account", "/profil")
+          setLoginEmail(email);
+          router.push("/account");
+          Cookies.set("connected", "true");
         }
       });
   };
 
   return (
     <div>
-      <Navbar />
+      <Head>
+        <title>Connexion</title>
+      </Head>
       <div className="flex md:flex-row min-h-screen">
         <div className="px-8 py-12 w-full md:w-auto">
           <div className="mb-12">
@@ -87,7 +84,7 @@ export default function signin({ setLoginEmail }) {
               Connectez-vous
             </h2>
           </div>
-          <div className>
+          <div>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label
@@ -123,16 +120,7 @@ export default function signin({ setLoginEmail }) {
                   onChange={handlePasswordChange}
                 />
               </div>
-              <div className="mb-4">
-                <input
-                  type="checkbox"
-                  name="remind"
-                  id="remind"
-                  className="mr-2"
-                />
-                <label htmlFor="remind">Se souvenir de moi</label>
-              </div>
-              <div className>
+              <div>
                 <div className="text-center">
                   <button
                     onClick={handleSubmit}
@@ -141,7 +129,7 @@ export default function signin({ setLoginEmail }) {
                     Se connecter
                   </button>
                   <a
-                    className="block py-4 text-blue-600 focus:outline-none"
+                    className="block pt-4 text-blue-600 focus:outline-none"
                     href="/aide"
                   >
                     Mot de passe oublié

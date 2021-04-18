@@ -3,6 +3,40 @@ import Link from "next/link";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  
+  const handleClick = (e) => {
+    const onglets = document.getElementsByClassName("onglet");
+    const blueBold = ["text-blue-600", "font-light"],
+      blue = ["from-blue-400", "to-blue-800"],
+      yellow = ["from-yellow-500", "to-yellow-400"];
+    for (let i = 0; i < onglets.length; i++) {
+      if (e.target === onglets[i]) {
+        if (
+          e.target === document.getElementById("inscription") ||
+          e.target === document.getElementById("connexion")
+        ) {
+          if (onglets[i] === document.getElementById("connexion")) {
+            onglets[i].classList.remove(...blue);
+            onglets[i].classList.add(...yellow);
+          }
+        } else {
+          onglets[i].classList.add(...blueBold);
+        }
+      } else {
+        if (
+          onglets[i] === document.getElementById("inscription") ||
+          onglets[i] === document.getElementById("connexion")
+        ) {
+          if (onglets[i] === document.getElementById("connexion")) {
+            onglets[i].classList.remove(...yellow);
+            onglets[i].classList.add(...blue);
+          }
+        } else {
+          onglets[i].classList.remove(...blueBold);
+        }
+      }
+    }
+  };
 
   return (
     <header>
@@ -10,7 +44,7 @@ export default function Navbar() {
         <Link href="/">
           <a className="text-2xl font-bold py-2 pl-4 lg:pl-2">
             <div id="logo">
-              <img className="logo h-10" src="Logo.svg" />
+              <img className="logo h-10" src="Logo.svg" alt="logo" />
             </div>
           </a>
         </Link>
@@ -35,7 +69,7 @@ export default function Navbar() {
           >
             <ul className="">
               <li className="py-2">
-                <a className="flex gap-4 py-2 uppercase" href="/">
+                <a className="flex gap-4 py-2 uppercase " href="/">
                   <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -87,11 +121,8 @@ export default function Navbar() {
               <li className="flex flex-col md:flex-row gap-4">
                 <Link href="/signin">
                   <a className="flex flex-col md:flex-row gap-4">
-                    <button className="focus:outline-none text-white px-4 py-2 font-bold flex-1 flex gap-2 items-center bg-gradient-to-r from-blue-400 to-blue-800 rounded-xl">
-                      <svg
-                        className="w-6 h-6 text-white"
-                        viewBox="0 0 24 24"
-                      >
+                    <button className="focus:outline-none text-white px-4 py-2 font-bold flex-1 flex gap-2 items-center bg-gradient-to-r from-blue-400 to-blue-800 rounded-xl hover:from-yellow-500 hover:to-yellow-400">
+                      <svg className="w-6 h-6 text-white" viewBox="0 0 24 24">
                         <path
                           fill="currentColor"
                           d="M12,19.2C9.5,19.2 7.29,17.92 6,16C6.03,14 10,12.9 12,12.9C14,12.9 17.97,14 18,16C16.71,17.92 14.5,19.2 12,19.2M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
@@ -125,61 +156,80 @@ export default function Navbar() {
         <div className="hidden lg:flex justify-between">
           <div>
             <ul className="flex items-center">
-              <li className="px-2 py-2 uppercase text-blue-600">
+              <li className="px-2 py-2 uppercase">
                 <Link href="/">
-                <a className="">
-                  Accueil
-                </a>
+                  <a
+                    className="onglet hover:text-blue-600 text-blue-600 font-bold"
+                    onClick={handleClick}
+                  >
+                    Accueil
+                  </a>
                 </Link>
               </li>
               <li className="px-2 py-2 uppercase">
                 <Link href="/presentation">
-                <a className="">
-                  Présentation
-                </a>
+                  <a
+                    className="onglet hover:text-blue-600"
+                    onClick={handleClick}
+                  >
+                    Présentation
+                  </a>
                 </Link>
               </li>
               <li className="px-2 py-2 uppercase">
                 <Link href="/aide">
-                <a className="">
-                  Contact
-                </a>
+                  <a
+                    className="onglet hover:text-blue-600"
+                    onClick={handleClick}
+                  >
+                    Contact
+                  </a>
                 </Link>
               </li>
               <li className="px-2 py-2 uppercase">
                 <Link href="/aide">
-                <a className="">
-                  Aide
-                </a>
+                  <a
+                    className="onglet hover:text-blue-600"
+                    onClick={handleClick}
+                  >
+                    Aide
+                  </a>
                 </Link>
-                
               </li>
-              <li className="px-2 py-2 flex gap-2 ml-4">
+              <li className="px-2 py-2 flex gap-2 ml-4 hover:text-blue-600">
                 <Link href="/signup">
-                <a>
-                  <button className="focus:outline-none flex-auto text-blue-600 px-4 py-2 font-bold border border-blue-600 flex gap-2 items-center rounded-xl focus:outline-none">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24">
-                      <path
-                        fill="currentColor"
-                        d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6M12,11A1.5,1.5 0 0,1 10.5,9.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 13.5,9.5A1.5,1.5 0 0,1 12,11Z"
-                      />
-                    </svg>
-                    S'inscrire
-                  </button>
-                </a>
+                  <a>
+                    <button
+                      className="onglet focus:outline-none flex-auto text-blue-600 px-4 py-2 font-bold border border-blue-600 flex gap-2 items-center rounded-xl focus:outline-none"
+                      id="inscription"
+                      onClick={handleClick}
+                    >
+                      <svg className="w-6 h-6" viewBox="0 0 24 24">
+                        <path
+                          fill="currentColor"
+                          d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6M12,11A1.5,1.5 0 0,1 10.5,9.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 13.5,9.5A1.5,1.5 0 0,1 12,11Z"
+                        />
+                      </svg>
+                      S'inscrire
+                    </button>
+                  </a>
                 </Link>
                 <Link href="/signin">
-                <a>
-                  <button className="focus:outline-none flex-auto text-white px-4 py-2 font-bold flex gap-2 items-center bg-gradient-to-r from-blue-400 to-blue-800 rounded-xl focus:outline-none">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24">
-                      <path
-                        fill="currentColor"
-                        d="M12,19.2C9.5,19.2 7.29,17.92 6,16C6.03,14 10,12.9 12,12.9C14,12.9 17.97,14 18,16C16.71,17.92 14.5,19.2 12,19.2M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
-                      />
-                    </svg>
-                    Se connecter
-                  </button>
-                </a>
+                  <a>
+                    <button
+                      className="onglet focus:outline-none flex-auto text-white px-4 py-2 font-bold flex gap-2 items-center bg-gradient-to-r from-blue-400 to-blue-800 hover:from-yellow-500 hover:to-yellow-400 rounded-xl focus:outline-none"
+                      id="connexion"
+                      onClick={handleClick}
+                    >
+                      <svg className="w-6 h-6" viewBox="0 0 24 24">
+                        <path
+                          fill="currentColor"
+                          d="M12,19.2C9.5,19.2 7.29,17.92 6,16C6.03,14 10,12.9 12,12.9C14,12.9 17.97,14 18,16C16.71,17.92 14.5,19.2 12,19.2M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z"
+                        />
+                      </svg>
+                      Se connecter
+                    </button>
+                  </a>
                 </Link>
               </li>
             </ul>
