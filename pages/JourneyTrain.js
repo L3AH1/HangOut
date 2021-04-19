@@ -10,32 +10,30 @@ import style from "../styles/Home.module.css";
 import Cookies from "js-cookie";
 /**-------------------------------------------------------------------------------*
  *                                                                                *
- * Classe HJourneyTrain                                                           *
- * Gère l'affichage du voyage en train choisi par l'utilisateur                   *
+ * Class HJourneyTrain                                                            *
+ * Display result for the train journeys                                          *
  *                                                                                *
  * -------------------------------------------------------------------------------*
  */
-
 export default class JourneyTrain extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       journey: "",
-      cout: [],
-      coutTotal: 0,
+      cost: [],
+      totalCost: 0,
     };
   }
   /**
-   * Fonction getData()
-   * @param {données recupérées de l'url qui permette de refaire la même requête que celle choisie sur la 2e page} data
-   * Envoie la requête à Navitia et à la Sncf et récupère les données formattées
+   * Get data from Navitia's request
+   * @param {Object} data 
    */
   getData(data) {
     const API_KEY = "d7257033-908e-4678-9909-f9ac7fa6009a";
     const API_URL = "https://api.sncf.com/v1/coverage/sncf/";
     const depart = data.depart.split(" (")[0];
     const arrivee = data.arrivee.split(" (")[0];
-    //Recupération des id des villes demandées pour effectuer la requête vers Navitia
+    //ID of the DepartureCity and ArrivalCity
     var departID = "";
     var arriveeID = "";
 
@@ -43,7 +41,7 @@ export default class JourneyTrain extends React.Component {
       if (key == depart) departID = VILLES[key].id;
       if (key == arrivee) arriveeID = VILLES[key].id;
     }
-    //On formatte la date pour pouvoir l'utiliser et recupérer le bon trajet
+    //Date formatting
     const datatime =
       data.date.substr(6, 4) +
       data.date.substr(3, 2) +
@@ -53,7 +51,7 @@ export default class JourneyTrain extends React.Component {
       data.date.substr(14, 2) +
       "00";
 
-    //Requête Navitia
+    //Navitia's request
     fetch(
       `${API_URL}journeys?from=${departID}&to=${arriveeID}&key=${API_KEY}&datetime=${datatime}&`,
       { method: "GET" }
@@ -61,24 +59,23 @@ export default class JourneyTrain extends React.Component {
       .then((response) => response.json())
       .then((response) => {
         var responseFormatted = formatData(response);
-        var coutArray = coutAPISncf(responseFormatted);
-        //Une fois le voyage obtenu on recherche le cout des différentes étapes via la Sncf
-        for (var i = 0; i < coutArray.length; i++) {
-          if (coutArray[i].id != 0) {
-            const idDepart = coutArray[i].id;
-            fetch(coutArray[i].url, { method: "GET" })
+        var costArray = coutAPISncf(responseFormatted);
+        //Once we get the Navita's response, we try to get the cost of the journey with the Sncf's API
+        for (var i = 0; i < costArray.length; i++) {
+          if (costArray[i].id != 0) {
+            const idDeparture = costArray[i].id;
+            fetch(costArray[i].url, { method: "GET" })
               .then((response) => response.json())
               .then((response) => {
                 if (response.records[0] != undefined) {
-                  var coutFormate = formatJsonSncf(response);
-                  var coutPlein = coutFormate.costPlein + this.state.coutTotal;
-                  this.state.cout[idDepart] = coutFormate;
+                  var formatedCost = formatJsonSncf(response);
+                  var fullCost = formatedCost.costPlein + this.state.totalCost;
+                  this.state.cost[idDeparture] = formatedCost;
                   this.setState({
-                    coutTotal: coutPlein,
+                    totalCost: fullCost,
                   });
-                  console.log("cout", this.state.cout);
                 } else {
-                  this.state.cout[idDepart] = { costPlein: "ND" };
+                  this.state.cost[idDeparture] = { costPlein: "ND" };
                   this.setState({});
                 }
               });
@@ -96,7 +93,7 @@ export default class JourneyTrain extends React.Component {
   componentDidMount() {
     const lien = new URLSearchParams(window.location.search);
     const data = {
-      //Recupération des données dans l'url
+      //Data's recovery from the url
       depart: lien.get("from"),
       arrivee: lien.get("to"),
       date: lien.get("datetime"),
@@ -125,7 +122,14 @@ export default class JourneyTrain extends React.Component {
       }),
       body: JSON.stringify(body),
     })
-      .then((res) => res.json());
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          alert("Vous n'etes pas connecté 😯");
+        } else {
+          alert("Votre voyage a bien été sauvegardé ! 😁");
+        }
+      });
   }
 
   /**
@@ -163,8 +167,8 @@ export default class JourneyTrain extends React.Component {
             <div className="flex justify-center col-span-2 pr-4">
               <p className="flex italic font-extralight text-black pl-20 my-3">
                 Duree du trajet : {step.duree} (~{" "}
-                {this.state.cout[step.destinationDepart] != undefined
-                  ? this.state.cout[step.destinationDepart].costPlein
+                {this.state.cost[step.destinationDepart] != undefined
+                  ? this.state.cost[step.destinationDepart].costPlein
                   : " "}{" "}
                 €)
               </p>
@@ -367,7 +371,7 @@ export default class JourneyTrain extends React.Component {
                 <div className="relative">
                   <div className="rounded-lg px-2 bg-white border shadow-2xl">
                     <div className="px-4 py-8 mb-4 ">
-                      {/* Affichage des différents itinéraire, moche mais ça marche*/}
+                      {/*Display of steps, ugly but it works*/}
                       {this.state.journey.itinerary != undefined
                         ? this.state.journey.itinerary[0] != undefined
                           ? this.printStep(this.state.journey.itinerary[0])
@@ -497,7 +501,7 @@ export default class JourneyTrain extends React.Component {
                           <p className="font-bold text-yellow-400 pr-2">
                             Cout :
                           </p>
-                          <p> ~ {this.state.coutTotal} €</p>
+                          <p> ~ {this.state.totalCost} €</p>
                         </div>
                         <div className="flex">
                           <p className="font-bold text-yellow-400 pr-2">

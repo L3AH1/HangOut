@@ -4,6 +4,9 @@ import Footer from "../components/Footer";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
+/**
+ * Signin Page
+ */
 export default function signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -11,6 +14,9 @@ export default function signup() {
   const [password2, setPassword2] = useState("");
   const router = useRouter();
 
+  /**
+   * Function handleUsernameChange that get user's username
+   */
   const handleUsernameChange = useCallback(
     (event) => {
       setUsername(event.target.value);
@@ -18,6 +24,9 @@ export default function signup() {
     [setUsername]
   );
 
+  /**
+   * Function handleEmailChange that get user's email
+   */
   const handleEmailChange = useCallback(
     (event) => {
       setEmail(event.target.value);
@@ -25,6 +34,9 @@ export default function signup() {
     [setEmail]
   );
 
+  /**
+   * Function handlePassword1Change that get user's password
+   */
   const handlePassword1Change = useCallback(
     (event) => {
       setPassword1(event.target.value);
@@ -32,6 +44,9 @@ export default function signup() {
     [setPassword1]
   );
 
+  /**
+   * Function handlePassword2Change that get user's confirmation password
+   */
   const handlePassword2Change = useCallback(
     (event) => {
       setPassword2(event.target.value);
@@ -39,52 +54,78 @@ export default function signup() {
     [setPassword2]
   );
 
+  /**
+   * Function handleSubmit that submit the form and registred a user in the dataBase
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    /**
+     * Check if the user fill all the fields
+     */
     if (!username || !email || !password1 || !password2) {
       alert("Veuillez remplir tout les champs 😄");
       return;
     }
 
+    /**
+     * Check if the confirmation password is correct
+     */
     if (password1 !== password2) {
       alert("Veuillez entrer deux mots de passes identiques 😄");
       return;
     }
 
+    /**
+     * Regex that check if the email provide is in the right format
+     */
     const valid_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (email.length < 254 && valid_email.test(email) === false) {
       alert("Veuillez entrer une adresse e-mail valide 😄");
       return;
     }
 
+    /**
+     * Check if the password is lareger than 6 characteres
+     */
     if (password1.length < 6) {
       alert("Veuillez entrer un mot de passe d'au moins 6 caractères 😄");
       return;
     }
 
-    console.log(username, email, password1);
+    /**
+     * Convert body to JSON
+     */
     const body = JSON.stringify({
       username,
       email,
       password: password1,
     });
 
+    /**
+     * Send user's username, email and password to register him
+     */
     fetch("http://localhost:3000/api/users/signup", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json",
       }),
-      body: JSON.stringify(body), // convertit un objet en string
+      body: JSON.stringify(body),
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        /**
+         * If the user's email already exists
+         */
         if (res.error) {
           if (res.errorName === "EMAIL_ALREADY_USED") {
             alert("Adresse email déja utilisée");
           }
-        } else {
+        } 
+        /**
+         * Telle to the user he is registred and redirect him into the signin page
+         */
+        else {
           alert(
             "Bravo ! Vous êtes inscrit 🤗 \nConnectez-vous maintenant ! 😉"
           );

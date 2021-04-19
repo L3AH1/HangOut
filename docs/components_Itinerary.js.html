@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Itinerary.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Itinerary.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { findCityByCoords } from "../pages/api/requestNavitia";
+import style from "../styles/Home.module.css";
+import Cookies from "js-cookie";
+
+/**
+ * Type of itinerary to be calculated
+ * @type {{decouverte: number, conseille: number, economique: number, plusCourt: number, plusRapide: number}}
+ */
+const itit = {
+  conseille: 0, // focuses on road safety and comfort while offering a good compromise between time and distance.
+  plusRapide: 1, // provides the fastest route by emphasising motorways and major roads.
+  plusCourt: 2, // optimises distance.
+  decouverte: 3, // focuses on scenic road that may have a touristic interest.
+  economique: 4, // takes into consideration fuel consumption costs and tolls as well as the route distance.
+}
+
+const classNameRoadsheet = ["mt-2","h-0"];
+
+/**
+ * Component that displays map and the itinerary
+ */
+class Itinerary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      depart:"",
+      arrivee:"",
+      typeItineraire: itit.conseille,
+      eviterPeage: false,
+      date: "",
+      itinerary: {},
+      isRoadsheetOpen:-1,
+    }
+    this.saveData = this.saveData.bind(this);
+  }
+
+
+  /**
+   * Displays the road sheet where there are all the details of the itineraries
+   * @function
+   * @param index index of road sheet to open
+   */
+  openRoadsheet = (index) =>{
+    if(this.state.isRoadsheetOpen !== -1){
+      this.closeRoadsheet(this.state.isRoadsheetOpen);
+    }
+    if (this.state.isRoadsheetOpen !== index) {
+      let button = document.getElementsByClassName("closeRoadsheet")[index];
+      let roadsheet = document.getElementsByClassName("roadsheet")[index];
+      button.classList.remove("hidden");
+      roadsheet.classList.remove(...classNameRoadsheet);
+      window.scrollTo({
+        top: roadsheet.offsetTop - 30,
+        left: 0,
+        behavior: 'smooth'
+      });
+      this.setState({
+        isRoadsheetOpen: index,
+      })
+    }
+  }
+
+  /**
+   * Hides the road sheet where there are all the details of the itinerary
+   */
+  closeRoadsheet(index){
+    let button = document.getElementsByClassName("closeRoadsheet")[index];
+    let roadsheet = document.getElementsByClassName("roadsheet")[index];
+    button.classList.add("hidden");
+    roadsheet.classList.add(...classNameRoadsheet);
+
+    this.setState({
+      isRoadsheetOpen : -1,
+    })
+  }
+
+  /**
+   * Saves the data to database
+   */
+  saveData() {
+    const lien = new URLSearchParams(window.location.search);
+    const email = Cookies.get("email");
+    const data = {
+      depart: this.state.villeDepart,
+      arrivee: this.state.villeArrivee,
+      depart_link: lien.get("from"),
+      arrivee_link: lien.get("to"),
+      date: lien.get("datetime"),
+      train: false,
+    };
+
+    let body = {
+      email: email,
+      data: data,
+    };
+
+    fetch("http://localhost:3000/api/users/travels", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Typ": "application/json",
+      }),
+      body: JSON.stringify(body),
+    })
+        .then((res) => res.json());
+  }
+  /**
+   * Gets the map and the itineraries after the render has been mounted
+   */
+  componentDidMount() {
+    /**
+     *
+     * @type {URLSearchParams}
+     */
+    const lien = new URLSearchParams(window.location.search);
+    /**
+     * Retrieves the data in the url
+     * @type {{arrivee: string, depart: string}}
+     */
+    const data = {
+      depart: lien.get("from"),
+      arrivee: lien.get("to"),
+    }
+
+    this.getData(data,0);
+  }
+
+  /**
+   * Display the map
+   * @param {number} indexItinerary index of itinerary to be calculated
+   * @param {Object} data parameters to the configuration of the itineraries
+   */
+  getData = (data,indexItinerary= 0) => {
+    let confMap = {
+      container: document.getElementsByClassName("mapContainer")[indexItinerary],
+    };
+    let callbacksMap = {
+      onSuccess: () => {
+        this.launchItinerary(data,0);
+        this.launchItinerary(data,1);
+        this.launchItinerary(data,2);
+      },
+    };
+    VMLaunch("ViaMichelin.Api.Map", confMap, callbacksMap);
+  };
+
+  /**
+   * Get the itineraries
+   * @param {number} indexItinerary index of itinerary to be calculated
+   * @param {Object} data parameters to the configuration of the itineraries
+   */
+  launchItinerary = (data,indexItinerary = 0) => {
+    let villeDep = data.depart.split(":");
+    let destination = data.arrivee.split(":");
+
+    let villeDepart = {
+          coords: { lat: parseFloat(villeDep[0]), lon: parseFloat(villeDep[1]) },
+        },
+        villeDArrivee = {
+          coords: {
+            lat: parseFloat(destination[0]),
+            lon: parseFloat(destination[1]),
+          },
+        };
+
+    this.setState({
+      villeDepart: findCityByCoords(villeDepart.coords).name,
+      villeArrivee: findCityByCoords(villeDArrivee.coords).name,
+    });
+    let confIti = {
+      steps: [villeDepart, villeDArrivee],
+      map: {
+        container: document.getElementById("mapContainer"),
+        focus: true,
+      },
+      roadsheet: document.getElementsByClassName("roadsheet")[indexItinerary],
+      itit: this.state.typeItineraire,
+      //eviter les peage
+      avoidTolls: this.state.eviterPeage,
+      //propose alternative routes if it exist
+      multipleIti: true,
+      itiIdx: indexItinerary,
+      //préciser la date de départ sinon il prend automatiquement la date du jour
+      //date:this.state.date,
+    };
+    let callbacks = {
+      onSuccess: (result) => {
+        let output = document.getElementsByClassName("bilanItineraire");
+        this.setState({
+          itinerary: result.header.summaries,
+        });
+        for (let i = 0; i &lt; result.header.summaries.length; i++) {
+          let iti = result.header.summaries[i];
+          let t = iti.totalTime,
+              h = Math.round(t / 3600),
+              m = Math.round((t % 3600) / 60),
+              name = " ",
+              report = "";
+          for (let j = 0; j &lt; iti.names.length; j++) {
+            name += iti.names[j] + " ";
+          }
+          report +=
+              "&lt;div class='text-center mb-3 font-bold relative flex items-center justify-center'>&lt;span class='rounded-full bg-yellow-200 text-yellow-500 text-lg w-8 h-8'>" +
+              (i + 1) +
+              "&lt;/span>&lt;p class='text-blue-500 text-bold text-lg'>" +
+              name +
+              "&lt;/p>&lt;/div>";
+          report +=
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Distance&lt;/p>" +
+              "&lt;span class='float-right'>" +
+              iti.totalDist / 1000 +
+              "km&lt;/span>&lt;/div>";
+          report +=
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Durée&lt;/p>" +
+              "&lt;span class='float-right'>" +
+              h +
+              "h" +
+              m +
+              "min&lt;/span>&lt;/div>";
+          report +=
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Cout total&lt;/p>" +
+              "&lt;span class='float-right'>" +
+              (iti.consumption + iti.tollCost.car / 100).toFixed(2) +
+              "€&lt;/span>&lt;/div>";
+          report +=
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Cout Carburant&lt;/p>" +
+              "&lt;span class='float-right'>" +
+              iti.consumption +
+              "€&lt;/span>&lt;/div>";
+          report +=
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Cout Peage&lt;/p>" +
+              "&lt;span class='float-right'>" +
+              iti.tollCost.car / 100 +
+              "€&lt;/span>&lt;/div>";
+          output[i].innerHTML = report;
+
+          //Customizes styles of roadsheet content
+          let roadsheets = document.getElementsByClassName("roadsheet");
+          for (let j = 0; j &lt; roadsheets.length; j++) {
+            let roadsheetContent = roadsheets[j].getElementsByClassName("roadsheetContent")[0];
+            let classNames = ["p-5","shadow-lg","rounded-2xl","border-solid"];
+            roadsheetContent.classList.add(...classNames);
+          }
+        }
+      },
+    };
+    VMLaunch("ViaMichelin.Api.Itinerary", confIti, callbacks);
+  };
+  render() {
+    const { villeDepart, villeArrivee, itinerary } = { ...this.state };
+    const classNameDivDetails = " group bg-blue-200  hover:bg-blue-500 ";
+    const classNameTextDetails = " text-blue-500 group-hover:text-white ";
+    const classNameClose = " bg-red-200 hover:bg-red-500 ";
+    const classNameTextClose = " text-red-500 hover:text-white ";
+
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    const yyyy = today.getFullYear();
+    if (dd &lt; 10) {
+      dd = "0" + dd;
+    }
+    if (mm &lt; 10) {
+      mm = "0" + mm;
+    }
+
+    today = yyyy + "-" + mm + "-" + dd;
+
+    const date = today;
+
+    let bilanItineraire;
+    if (itinerary.length > 0)
+      bilanItineraire = itinerary.map((iti, index) => (
+          &lt;div key={index} className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center cursor-default">
+            &lt;div className="relative">
+              &lt;div className="rounded-2xl px-2 bg-white border border-solid shadow-md">
+                &lt;div className="px-4 pt-8  mb-4">
+                  &lt;div className="flex gap-8 flex-row-reverse flex items-center pr-56"/>
+                  &lt;div>
+                    &lt;pre className="bilanItineraire"/>
+                  &lt;/div>
+                  &lt;div className={(this.state.isRoadsheetOpen === index ? classNameClose : classNameDivDetails) + " mt-6 rounded-xl cursor-pointer transition"} onClick={()=>this.openRoadsheet(index)}>
+                    &lt;p className={(this.state.isRoadsheetOpen  === index ? classNameTextClose : classNameTextDetails) + " font-bold text-lg text-center py-2"}>
+                      {this.state.isRoadsheetOpen  === index ? "Fermer" : "Voir les détails"}
+                    &lt;/p>
+                  &lt;/div>
+                  &lt;div className="group bg-green-200 my-3 rounded-xl hover:bg-green-500"
+                          onClick={this.saveData}>
+                    &lt;a>
+                      &lt;p className="font-bold text-green-500 text-lg text-center py-2 group-hover:text-white">
+                        Sauvegarder
+                      &lt;/p>
+                    &lt;/a>
+                  &lt;/div>
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+      ));
+
+    return (
+        &lt;div id="itinerary">
+
+          &lt;div className="container mx-auto relative flex items-center justify-between shadow-lg p-3">
+            &lt;h1 className="text-3xl font-bold text-blue-500">
+              Votre itinéraire : {villeDepart} &amp;gt; {villeArrivee}
+            &lt;/h1>
+            &lt;img
+                className="h-20"
+                src="http://www.jk-motorsport.com/wp-content/uploads/2020/10/JK-Motorsport.png"
+                alt={"image voiture"}
+            />
+          &lt;/div>
+
+          &lt;div
+              id="mapContainer"
+              className="mapContainer"
+              style={{
+                width: "100%",
+                height: "500px",
+              }}
+          />
+
+          &lt;section className={style.herocarbilan + " pb-36"}>
+
+            &lt;div className=" pt-7 pl-5">
+              &lt;p className="font-bold text-3xl text-blue-500">
+                {itinerary.length &amp;&amp;
+                (itinerary.length > 1
+                    ? itinerary.length + " Itineraires possibles:"
+                    : itinerary.length + " Itineraire possible:")}
+              &lt;/p>
+            &lt;/div>
+
+            &lt;div className="flex items-center justify-between py-9 flex-col md:flex-row gap-y-8 gap-4">
+              {bilanItineraire}
+            &lt;/div>
+
+            &lt;div id="feuilleDeRoute" >
+              &lt;div className="roadsheet overflow-auto px-5 h-0">
+                &lt;p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
+                  &lt;i className="text-yellow-500 text-bold">
+                    {this.state.itinerary.length > 0 &amp;&amp; " " + this.state.itinerary[0].names.join(" ")}
+                  &lt;/i> :
+                &lt;/p>
+              &lt;/div>
+              &lt;button className={classNameClose + classNameTextClose + "closeRoadsheet  hidden justify-self-center focus:outline-none rounded-xl font-bold cursor-pointer py-3 px-12 block mx-auto mb-5"}
+                      onClick={() => this.closeRoadsheet(0)}
+              >
+                Fermer
+              &lt;/button>
+            &lt;/div>
+
+            &lt;div id="feuilleDeRoute" >
+              &lt;div className="roadsheet overflow-auto px-5 h-0">
+                &lt;p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
+                  &lt;i className="text-yellow-500 text-bold">
+                    {this.state.itinerary.length > 1 &amp;&amp; " " +  this.state.itinerary[1].names.join(" ")}
+                  &lt;/i> :
+                &lt;/p>
+              &lt;/div>
+              &lt;button className={classNameClose + classNameTextClose + "closeRoadsheet  hidden justify-self-center focus:outline-none rounded-xl font-bold cursor-pointer py-3 px-12 block mx-auto mb-5"}
+                      onClick={() => this.closeRoadsheet(1)}
+              >
+                Fermer
+              &lt;/button>
+            &lt;/div>
+
+            &lt;div id="feuilleDeRoute" >
+              &lt;div className="roadsheet overflow-auto px-5 h-0">
+                &lt;p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
+                  &lt;i className="text-yellow-500 text-bold">
+                    {this.state.itinerary.length > 2 &amp;&amp; " " +  this.state.itinerary[2].names.join(" ")}
+                  &lt;/i> :
+                &lt;/p>
+              &lt;/div>
+              &lt;button className={classNameClose + classNameTextClose + "closeRoadsheet  hidden justify-self-center focus:outline-none rounded-xl font-bold cursor-pointer py-3 px-12 block mx-auto mb-5"}
+                      onClick={() => this.closeRoadsheet(2)}
+              >
+                Fermer
+              &lt;/button>
+            &lt;/div>
+
+          &lt;/section>
+        &lt;/div>
+    );
+  }
+}
+
+export default Itinerary;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#formattageVille">formattageVille</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 15:20:50 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

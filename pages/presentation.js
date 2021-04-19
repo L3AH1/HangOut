@@ -3,6 +3,9 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Footer from "../components/Footer";
 
+/* 
+  Presentation page display class
+ */
 export default class presentation extends React.Component {
   render() {
     return (

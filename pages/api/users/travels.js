@@ -1,9 +1,16 @@
-import React, { useState } from "React";
+import React, { useState } from "react";
 import { connectToDatabase } from "../../../util/mongodb";
 
+/**
+ * Async function
+ * @param {req} request the request.
+ * @param {res} result the answer.
+ * @returns {res.json} a answer formatted in json.
+ */
 export default async function travel(req, res) {
-  //get = obtenir des infos
-  // Recuperer de la BDD l'ensemble des voyages sauvegardés d'un utilisateur
+  /**
+   * Get all the save's travels from a user
+   */
   if (req.method === "GET") {
     const email = req.query.email;
 
@@ -12,8 +19,9 @@ export default async function travel(req, res) {
     res.json(response);
   }
 
-  //post = envoyer des infos
-  //Sauvegarder, pour un utilisateur, un voyage sur son compte
+  /**
+   * Save a travel into a user's account
+   */
   if (req.method === "POST") {
     const body = JSON.parse(req.body);
     const data = body.data;
@@ -32,13 +40,18 @@ export default async function travel(req, res) {
   }
 }
 
-// Recupere l'ensemble des voyages d'un utilisteur inscrit
-// Dans le cas ou celui-ci n'existe pas, la fonction renvoi une erreur
+/**
+ * Get all the save's travels from a user
+ */
 async function getTravels(email) {
-  //Connexion a la base de données
+  /**
+   * Connection to the database
+   */
   const { db } = await connectToDatabase();
 
-  //On trouve un utilisateur sur la BDD grace a son email
+  /**
+   * Find a user with his email
+   */
   const users = await db.collection("users").find({ email }).toArray();
 
   if (users.length == 0) {
@@ -52,10 +65,14 @@ async function getTravels(email) {
 }
 
 async function addTravels(email, data) {
-  //Connexion a la base de données
+  /**
+   * Connection to the database
+   */
   const { db } = await connectToDatabase();
 
-  //On trouve un utilisateur sur la BDD grace a son email
+  /**
+   * Find a user with his email
+   */
   const results = await db
     .collection("users")
     .updateOne({ email }, { $push: { travels: data } });

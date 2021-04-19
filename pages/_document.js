@@ -1,6 +1,15 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
+/**
+ * Function MyDocument
+ * @returns A next.js document who's commonly used to augment application's <html> and <body> tags
+ */
 class MyDocument extends Document {
+  /**
+   * Async function
+   * @param {ctx} context the context.
+   * @returns {...initialProps} Props.
+   */
   static async getInitialProps(ctx) {
     const initialProps = await Document.getInitialProps(ctx);
     return { ...initialProps };
@@ -15,11 +24,13 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
           <script
-            src="https://secure-apijs.viamichelin.com/apijsv2/api/js?key=JSV2GP20210329164809496080620826$165380&lang=fra&protocol=https"
+            src="https://secure-apijs.viamichelin.com/apijsv2/api/js?key=JSV2GP20210416014252446000089045$165380&lang=fra&protocol=https"
             type="text/javascript"
           >
             {" "}
           </script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+          <title>HangOut</title>
         </Head>
         <body>
           <Main />

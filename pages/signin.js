@@ -5,11 +5,17 @@ import Footer from "../components/Footer";
 import Head from "next/head";
 import Cookies from "js-cookie";
 
+/**
+ * Signin Page
+ */
 export default function signin({ setLoginEmail }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
+  /**
+   * Function handleEmailChange that get user's email
+   */
   const handleEmailChange = useCallback(
     (event) => {
       setEmail(event.target.value);
@@ -17,6 +23,9 @@ export default function signin({ setLoginEmail }) {
     [setEmail]
   );
 
+  /**
+   * Function handlePasswordChange that get user's email
+   */
   const handlePasswordChange = useCallback(
     (event) => {
       setPassword(event.target.value);
@@ -24,27 +33,38 @@ export default function signin({ setLoginEmail }) {
     [setPassword]
   );
 
+  /**
+   * Function handleSubmit that submit the form and find if a user exist in the dataBase
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    /**
+     * Regex that check if the email provide is in the right format
+     */
     const valid_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (email.length < 254 && valid_email.test(email) === false) {
       alert("Veuillez entrer une adresse e-mail valide 😄");
       return;
     }
 
-    console.log(email, password);
+    /**
+     * Convert body to JSON
+     */
     const body = JSON.stringify({
       email,
       password,
     });
 
+    /**
+     * Send user's email and password to identify him
+     */
     fetch("http://localhost:3000/api/users/signin", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json",
       }),
-      body: JSON.stringify(body), // convertit un objet en string
+      body: JSON.stringify(body),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -64,6 +84,9 @@ export default function signin({ setLoginEmail }) {
           return;
         }
 
+        /**
+         * If a user is found then create a Cookie and redirect him into the account page
+         */
         if (res.success) {
           setLoginEmail(email);
           router.push("/account");

@@ -84,7 +84,7 @@ class HDestination extends React.Component {
               <p className="italic ml-2">{duree}</p>
             </div>
             <div className="flex flex-row justify-between">
-              <p className="font-bold">Coût</p>
+              <p className="font-bold">{cost != undefined ? "Coût" : ""}</p>
               <p className="italic ml-2">{cost}</p>
             </div>
             <div className="text-black text-sm mr-2 mb-1 text-left h-10 overflow-y-scroll">

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Autocomplete.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Autocomplete.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+
+/**
+ * Input autocompletion of given suggestions
+ * @return {JSX.Element} input autocomplete
+ */
+class Autocomplete extends React.Component {
+  /**
+   * @constructor
+   * @param props
+   */
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      userInput:"",
+    };
+  }
+
+  /**
+   * Updates the input value when there is a change
+   * @function
+   * @param {Event} e changed
+   */
+  onChange = (e) => {
+    const suggestions  = this.props.suggestions;
+    const userInput = e.currentTarget.value;
+
+    //take only the suggestions which contain the value of the input
+    const filteredSuggestions = suggestions.filter(
+        (suggestion) =>
+            suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+    );
+
+    this.setState({
+      activeSuggestion: 0,
+      filteredSuggestions: filteredSuggestions,
+      showSuggestions: true,
+      userInput: e.currentTarget.value,
+    });
+  };
+  /**
+   * Puts the suggestion cliked as value of the input
+   * @function
+   * @param {Event} e event clicked
+   */
+  onClick = (e) => {
+    this.setState({
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      userInput: this.state.filteredSuggestions[e.currentTarget.value],
+    });
+  };
+  /**
+   * Chooses a suggestion by keyboard
+   * @function
+   * @param {Event} e event on key down
+   */
+  onKeyDown = (e) => {
+    const { activeSuggestion, filteredSuggestions } = this.state;
+    /**
+     * Return(Enter) key : puts the suggestion on key down as value of the input
+     */
+    if (e.keyCode === 13) {
+      this.setState({
+        activeSuggestion: 0,
+        showSuggestions: false,
+        userInput: filteredSuggestions[activeSuggestion],
+      });
+      e.preventDefault();
+    }
+    // User pressed the up arrow, increment the index
+    else if (e.keyCode === 38) {
+      if (activeSuggestion === 0) {
+        return;
+      }
+      this.setState({ activeSuggestion: activeSuggestion - 1 });
+    }
+    // User pressed the down arrow, increment the index
+    else if (e.keyCode === 40) {
+      if (activeSuggestion - 1 === filteredSuggestions.length) {
+        return;
+      }
+      this.setState({ activeSuggestion: activeSuggestion + 1 });
+    }
+  };
+  render() {
+    const {
+      onChange,
+      onClick,
+      onKeyDown,
+      state: {
+        activeSuggestion,
+        filteredSuggestions,
+        showSuggestions,
+        userInput,
+      },
+    } = this;
+
+    let suggestionsListComponent;
+    //Show suggestions when the user types a value in the input
+    if (showSuggestions &amp;&amp; userInput) {
+      if (filteredSuggestions.length) {
+        suggestionsListComponent = (
+            &lt;ul className="absolute suggestions bg-white border border-solid border-400 border-t-0 list-none mt-0 max-h-20 overflow-y-auto w-40">
+              {filteredSuggestions.map((suggestion, index) => {
+                let className = "";
+                // Customizes the activeSuggestion's style
+                if (index === activeSuggestion) {
+                  className = "suggestion-active bg-gray-200 cursor-pointer";
+                }
+                // Puts the chain in the userInput to bold
+                const indexOfUserInput = suggestion.toLowerCase().indexOf(userInput.toLowerCase()) ;
+                const start = suggestion.substring(0,indexOfUserInput),
+                    chainUserInput = suggestion.substring(indexOfUserInput ,indexOfUserInput + userInput.length),
+                    end = suggestion.substring(indexOfUserInput + userInput.length);
+
+                return (
+                    &lt;li className={className + " hover:bg-gray-200 cursor-pointer"} key={suggestion} onClick={onClick} value={index}>
+                      {start}&lt;strong>{chainUserInput}&lt;/strong>{end}
+                    &lt;/li>
+                );
+              })}
+            &lt;/ul>
+        );
+      }
+      //If there is no suggestion matching the user input
+      else {
+        suggestionsListComponent = (
+            &lt;div className="no-suggestions text-gray-500 absolute bg-white border border-solid border-400 border-t-0 w-auto">
+              &lt;p>Aucune ville trouvée 🙁&lt;/p>
+            &lt;/div>
+        );
+      }
+    }
+    return (
+        &lt;div>
+          &lt;input
+              id="ville"
+              name="ville"
+              type="text"
+              placeholder="ex. Nice"
+              className="focus:outline-none bg-transparent"
+              required
+              autoComplete="off"
+              onChange={onChange}
+              onKeyDown={onKeyDown}
+              value={userInput}
+          />
+          {suggestionsListComponent}
+        &lt;/div>
+    );
+  }
+}
+export default Autocomplete;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#formattageVille">formattageVille</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 15:20:50 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
