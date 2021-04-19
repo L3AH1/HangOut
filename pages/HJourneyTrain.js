@@ -1,12 +1,12 @@
 import React from "react";
 import Head from "next/head";
-import Navbar from "../components/Navbar";
 import styles from "../styles/Home.module.css";
 import formatData from "./api/formatJsonNavitia";
 import { VILLES } from "./api/Ville";
 import coutAPISncf from "./api/coutAPISncf";
 import formatJsonSncf from "./api/formatJsonSncf";
 import HFooter from "../components/HFooter";
+import style from "../styles/Home.module.css";
 /**-------------------------------------------------------------------------------*
  *                                                                                *
  * Classe HJourneyTrain                                                           *
@@ -113,7 +113,7 @@ export default class HJourneyTrain extends React.Component {
       return (
         <div className="grid grid-flow-row grid-cols-1 grid-lines-1 md:gap-0 w-96">
           <div className="grid grid-flow-row md:gap-1 justify-center">
-            <p className="flex italic text-green-500">
+            <p className="flex italic font-serif font-bold text-red-400">
               Attente en gare : {step.duree}
             </p>
           </div>
@@ -125,17 +125,18 @@ export default class HJourneyTrain extends React.Component {
         step.destinationDepart != step.destinationArrivee
       ) {
         return (
-          <div className="grid ">
-            <div >
+          <div className="grid p-3">
+            <div className="text-left">
               <p className="flex font-bold">{step.heureDepart.substr(11, 5)}</p>
             </div>
-            <div className="flex justify-center md:justify-start">
-              <p className="flex">
+            <div className="flex justify-start pl-8">
+              <p className="flex font-bold text-blue-500">
                 {step.waiting ? "waiting" : step.destinationDepart}
               </p>
             </div>
-            <div className="flex justify-center md:col-span-2 pr-4">
-              <p className="flex italic font-extralight">
+            <img src="Line.svg" className="h-24 w-24 absolute ml-3" />
+            <div className="flex justify-center col-span-2 pr-4">
+              <p className="flex italic font-extralight text-black pl-12 my-3">
                 Duree du trajet : {step.duree} (~{" "}
                 {this.state.cout[step.destinationDepart] != undefined
                   ? this.state.cout[step.destinationDepart].costPlein
@@ -143,13 +144,13 @@ export default class HJourneyTrain extends React.Component {
                 €)
               </p>
             </div>
-            <div className="grid grid-flow-row justify-center md:justify-end pr-4">
+            <div className="text-left">
               <p className="flex font-bold">
                 {step.heureArrivee.substr(11, 5)}
               </p>
             </div>
-            <div className="flex justify-center md:justify-start">
-              <p className="flex">
+            <div className="flex justify-start pl-8">
+              <p className="flex font-bold text-blue-500">
                 {step.waiting ? "waiting" : step.destinationArrivee}
               </p>
             </div>
@@ -165,8 +166,6 @@ export default class HJourneyTrain extends React.Component {
           <Head>
             <title>Bilan Train</title>
           </Head>
-          {/* En tete */}
-          <Navbar />
         </div>
 
         <div>
@@ -176,7 +175,7 @@ export default class HJourneyTrain extends React.Component {
               {this.state.journey.destinationDepart != undefined
                 ? this.state.journey.destinationDepart.split(" (")[0]
                 : this.state.journey.destinationDepart}{" "}
-              -{">"}{" "}
+              {">"}{" "}
               {this.state.journey.destinationArrivee != undefined
                 ? this.state.journey.destinationArrivee.split(" (")[0]
                 : this.state.journey.destinationArrivee}
@@ -337,12 +336,12 @@ export default class HJourneyTrain extends React.Component {
             </svg>
           </div>
 
-          <div>
-            <div className="flex items-center justify-between py-9 bg-gray-50">
-              <div className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center gap-8">
+          <section className={style.herotrain + " py-12 min-h-96"}>
+            <div className="flex items-center justify-between py-9 ">
+              <div className="container mx-auto px-4 h-full flex flex-col items-center gap-8">
                 <div className="relative">
                   <div className="rounded-lg px-2 bg-white border shadow-2xl">
-                    <div class="px-4 py-8 mb-4 text-left">
+                    <div className="px-4 py-8 mb-4 ">
                       {/* Affichage des différents itinéraire, moche mais ça marche*/}
                       {this.state.journey.itinerary != undefined
                         ? this.state.journey.itinerary[0] != undefined
@@ -449,45 +448,61 @@ export default class HJourneyTrain extends React.Component {
                 </div>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div className="bg-gray-50 pt-7 pl-5">
-            <p className="font-bold text-2xl">Bilan de votre trajet :</p>
-          </div>
-
-          <div className="flex items-center justify-between py-9 bg-gray-50">
-            <div className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center gap-8">
-              <div className="relative">
-                <div className="rounded-lg px-2 bg-white border shadow-2xl">
-                  <div class="px-4 py-8 mb-4">
-                    <div>
-                      <div className="flex flex-col pl-5 pt-2">
-                        <p className="font-bold">
-                          Duree : {this.state.journey.duree}
-                        </p>
-                        <p className="font-bold">
-                          Cout : ~ {this.state.coutTotal} €
-                        </p>
-                        <p className="font-bold">
-                          Heure de Depart : {this.state.journey.heureDepart}
-                        </p>
-                        <p className="font-bold">
-                          Heure d'Arrivee : {this.state.journey.heureArrivee}
-                        </p>
+          <section className={style.herotrainbilan + " pb-36"}>
+            <div className=" pt-7 ml-5">
+              <p className="font-bold text-3xl font-serif text-blue-600">
+                Bilan de votre trajet :
+              </p>
+            </div>
+            <div className="flex items-center justify-between py-9">
+              <div className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center gap-8">
+                <div className="relative">
+                  <div className="rounded-lg px-2 bg-gray-100 border shadow-2xl">
+                    <div className="px-4 py-4 mb-4">
+                        <div className="flex flex-col pl-5 py-2">
+                          <div className="flex">
+                            <p className="font-bold text-yellow-400 pr-2">
+                              Durée :
+                            </p>
+                            <p>{this.state.journey.duree}</p>
+                          </div>
+                          <div className="flex">
+                            <p className="font-bold text-yellow-400 pr-2">
+                              Cout :
+                            </p>
+                            <p> ~ {this.state.coutTotal} €</p>
+                          </div>
+                          <div className="flex">
+                            <p className="font-bold text-yellow-400 pr-2">
+                              Date et heure de départ :
+                            </p>
+                            <p>{this.state.journey.heureDepart}</p>
+                          </div>
+                          <div className="flex">
+                            <p className="font-bold text-yellow-400 pr-2">
+                              Date et heure d'arrivée :{" "}
+                            </p>
+                            <p>{this.state.journey.heureArrivee}</p>
+                          </div>
+                        </div>
+                      <div
+                        className="group bg-green-200 my-3 rounded-xl hover:bg-green-500"
+                        onClick={this.saveData}
+                      >
+                        <a>
+                          <p className="font-bold text-green-500 text-lg text-center py-2 group-hover:text-white">
+                            Sauvegarder
+                          </p>
+                        </a>
                       </div>
-                    </div>
-                    <div className="bg-blue-600 mt-6 mx-4 rounded-xl">
-                      <a href="/signin">
-                        <p className="font-bold text-white text-xl text-center py-2">
-                          + Sauvegarder
-                        </p>
-                      </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
 
           <HFooter />
         </div>
