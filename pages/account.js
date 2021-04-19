@@ -1,16 +1,33 @@
 import React from "react";
 import Head from "next/head";
-import Navbar from "../components/Navbar";
 import styles from "../styles/Home.module.css";
-import HFooter from "../components/HFooter";
+import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
-export default function account({ loginEmail }) {
+/**
+ * Account function
+ * @param {open} request the request.
+ * @param {email} result the answer.
+ * @returns a answer formatted in json.
+ */
+export default function account() {
+  // Constant who check if the value open is true or false
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState(loginEmail);
-  const [username, setUsername] = useState("");
+  // Constant who get the email from the application's cookies
+  const [email, setEmail] = useState(Cookies.get("email"));
+  // Constant who get the email from the application's cookies
+  const [username, setUsername] = useState(Cookies.get("username"));
+  // Constant for save data
+  const [data, setData] = useState([]);
 
+  /**
+ * Function useEffect
+ * @returns the users username, email and data from the database
+ */
   useEffect(() => {
+    console.log({ email });
+    console.log({ username });
     const body = JSON.stringify({
       email,
     });
@@ -19,26 +36,24 @@ export default function account({ loginEmail }) {
       headers: new Headers({
         "Content-Type": "application/json",
       }),
-      body: JSON.stringify(body), // convertit un objet en string
+      body: JSON.stringify(body), // convert an object into a string
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res)
+        console.log(res);
         if (res.user) {
           setEmail(res.user.email);
-          setUsername(res.user.username); 
+          setUsername(res.user.username);
+          setData(res.user.travels);
         }
-  
       });
-  }, [])
+  }, []);
 
   return (
     <div>
       <Head>
         <title>Compte</title>
       </Head>
-      {/* En tete */}
-      <Navbar />
       <main>
         <section className={styles.heroaccount + " py-12 min-h-96"}>
           <div className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center gap-8">
@@ -50,225 +65,27 @@ export default function account({ loginEmail }) {
                       <h6 class="text-2xl font-bold">Bienvenue {username},</h6>
                     </div>
                     <div>
-                      <svg
-                        version="1.1"
-                        id="fi_847969"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 464 464"
-                        style={{ enableBackground: "new 0 0 464 464" }}
-                        xmlSpace="preserve"
-                        class="w-24 h-24"
-                        fill="currentcolor"
-                      >
-                        <g>
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M305.872,451.92c-2.416,0.816-4.848,1.608-7.296,2.336C301.032,453.52,303.456,452.728,305.872,451.92z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M317.992,447.472c-2.608,1.04-5.216,2.064-7.872,3.008C312.776,449.528,315.392,448.512,317.992,447.472z"
-                          />
-                        </g>
-                        <circle
-                          style={{ fill: "#EFECE8" }}
-                          cx={232}
-                          cy={232}
-                          r={232}
-                        />
-                        <g>
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M293.896,455.584c-2.368,0.656-4.752,1.28-7.16,1.864C289.144,456.864,291.528,456.24,293.896,455.584z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M215.192,463.328c-2.832-0.2-5.656-0.416-8.448-0.72C209.544,462.912,212.368,463.128,215.192,463.328z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M177.256,457.44c-2.4-0.584-4.784-1.208-7.16-1.864C172.472,456.24,174.856,456.864,177.256,457.44z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M201.944,462c-2.536-0.328-5.064-0.672-7.576-1.08C196.872,461.328,199.408,461.664,201.944,462z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M232,464c-4.272,0-8.504-0.136-12.72-0.36C223.496,463.864,227.728,464,232,464z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M189.416,460.032c-2.432-0.448-4.856-0.928-7.256-1.456C184.56,459.104,186.984,459.584,189.416,460.032z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M142.608,446.128c-3.608-1.512-7.176-3.096-10.688-4.776C135.44,443.032,139.008,444.624,142.608,446.128z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M153.872,450.48c-2.648-0.952-5.264-1.968-7.872-3.008C148.608,448.512,151.224,449.528,153.872,450.48z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M244.72,463.64c-4.216,0.224-8.448,0.36-12.72,0.36C236.272,464,240.504,463.864,244.72,463.64z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M257.256,462.608c-2.8,0.304-5.624,0.52-8.448,0.72C251.632,463.128,254.456,462.912,257.256,462.608z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M281.848,458.576c-2.408,0.528-4.824,1.008-7.256,1.456
-		C277.016,459.584,279.44,459.104,281.848,458.576z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M269.64,460.912c-2.512,0.408-5.04,0.752-7.576,1.08
-		C264.592,461.664,267.128,461.328,269.64,460.912z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M332.032,441.368c-3.496,1.672-7.048,3.256-10.64,4.76
-		C324.984,444.624,328.536,443.048,332.032,441.368z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M165.424,454.256c-2.456-0.736-4.88-1.528-7.296-2.336
-		C160.544,452.728,162.968,453.52,165.424,454.256z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M321.392,446.128c-1.12,0.472-2.264,0.888-3.392,1.336
-		C319.12,447.016,320.264,446.6,321.392,446.128z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M332.352,441.224c-0.104,0.048-0.216,0.096-0.32,0.144
-		C332.136,441.32,332.248,441.28,332.352,441.224z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M182.152,458.576c-1.64-0.36-3.272-0.736-4.896-1.128
-		C178.88,457.84,180.512,458.216,182.152,458.576z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M194.36,460.912c-1.656-0.272-3.304-0.576-4.952-0.88
-		C191.064,460.336,192.704,460.648,194.36,460.912z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M219.28,463.64c-1.368-0.072-2.728-0.216-4.088-0.312C216.56,463.424,217.912,463.568,219.28,463.64
-		z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M206.744,462.608c-1.608-0.176-3.2-0.4-4.8-0.608C203.544,462.208,205.136,462.432,206.744,462.608z
-		"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M131.928,441.352c-0.088-0.04-0.184-0.08-0.272-0.12
-		C131.744,441.272,131.84,441.312,131.928,441.352z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M248.808,463.328c-1.368,0.096-2.72,0.24-4.088,0.312
-		C246.088,463.568,247.44,463.424,248.808,463.328z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M298.576,454.256c-1.552,0.464-3.112,0.896-4.68,1.328
-		C295.464,455.152,297.024,454.72,298.576,454.256z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M310.128,450.48c-1.408,0.504-2.832,0.96-4.248,1.44C307.296,451.44,308.72,450.984,310.128,450.48z
-		"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M146.008,447.472c-1.128-0.448-2.272-0.872-3.392-1.336
-		C143.736,446.6,144.88,447.016,146.008,447.472z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M158.128,451.92c-1.416-0.48-2.848-0.936-4.248-1.44C155.28,450.984,156.704,451.44,158.128,451.92z
-		"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M262.056,462c-1.6,0.208-3.192,0.44-4.8,0.608C258.864,462.432,260.456,462.208,262.056,462z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M286.744,457.44c-1.624,0.392-3.256,0.768-4.896,1.128
-		C283.488,458.216,285.12,457.84,286.744,457.44z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M274.584,460.032c-1.648,0.304-3.288,0.616-4.952,0.88
-		C271.296,460.648,272.936,460.336,274.584,460.032z"
-                          />
-                          <path
-                            style={{ fill: "#F9EDE0" }}
-                            d="M170.104,455.584c-1.56-0.432-3.128-0.864-4.68-1.328
-		C166.976,454.72,168.536,455.152,170.104,455.584z"
-                          />
-                        </g>
-                        <path
-                          style={{ fill: "#C6C3BD" }}
-                          d="M285.104,247.952C310.952,230.744,328,201.376,328,168c0-53.016-42.984-96-96-96s-96,42.984-96,96
-	c0,33.376,17.048,62.744,42.896,79.952c0,0,0.008,0.008,0.016,0.008c-0.008,0-0.008-0.008-0.008-0.008
-	c-61.872,18.648-110.048,68.864-125.56,132.04L53.352,380c2.528,3.048,5.152,6.024,7.832,8.944c0.648,0.712,1.328,1.392,1.992,2.088
-	c2.064,2.192,4.152,4.352,6.296,6.464c0.888,0.872,1.792,1.712,2.696,2.568c1.984,1.888,3.992,3.752,6.04,5.568
-	c1.016,0.896,2.048,1.784,3.072,2.664c2.008,1.72,4.04,3.408,6.112,5.056c1.088,0.872,2.184,1.728,3.28,2.584
-	c2.096,1.616,4.224,3.184,6.376,4.72c1.112,0.792,2.208,1.6,3.336,2.376c2.272,1.568,4.584,3.072,6.912,4.56
-	c1.048,0.664,2.072,1.352,3.128,2.008c2.688,1.656,5.424,3.24,8.184,4.792c0.728,0.408,1.44,0.848,2.176,1.248
-	c3.568,1.952,7.192,3.824,10.872,5.592c0.088,0.04,0.184,0.08,0.272,0.12c3.512,1.68,7.08,3.272,10.688,4.776
-	c1.12,0.472,2.264,0.888,3.392,1.336c2.608,1.04,5.216,2.064,7.872,3.008c1.408,0.504,2.832,0.96,4.248,1.44
-	c2.416,0.816,4.848,1.608,7.296,2.336c1.552,0.464,3.112,0.896,4.68,1.328c2.368,0.656,4.752,1.28,7.16,1.864
-	c1.624,0.392,3.256,0.768,4.896,1.128c2.408,0.528,4.824,1.008,7.256,1.456c1.648,0.304,3.288,0.616,4.952,0.88
-	c2.512,0.408,5.04,0.752,7.576,1.08c1.6,0.208,3.192,0.44,4.8,0.608c2.8,0.304,5.624,0.52,8.448,0.72
-	c1.368,0.096,2.72,0.24,4.088,0.312c4.216,0.24,8.448,0.376,12.72,0.376s8.504-0.136,12.72-0.36
-	c1.368-0.072,2.728-0.216,4.088-0.312c2.832-0.2,5.656-0.416,8.448-0.72c1.608-0.176,3.2-0.4,4.8-0.608
-	c2.536-0.328,5.064-0.672,7.576-1.08c1.656-0.272,3.304-0.576,4.952-0.88c2.432-0.448,4.856-0.928,7.256-1.456
-	c1.64-0.36,3.272-0.736,4.896-1.128c2.4-0.584,4.784-1.208,7.16-1.864c1.56-0.432,3.128-0.864,4.68-1.328
-	c2.456-0.736,4.88-1.528,7.296-2.336c1.416-0.48,2.848-0.936,4.248-1.44c2.648-0.952,5.264-1.968,7.872-3.008
-	c1.128-0.448,2.272-0.872,3.392-1.336c3.592-1.504,7.144-3.08,10.64-4.76c0.104-0.048,0.216-0.096,0.32-0.144
-	c3.68-1.768,7.304-3.64,10.872-5.592c0.736-0.4,1.448-0.84,2.176-1.248c2.76-1.552,5.496-3.136,8.184-4.792
-	c1.056-0.648,2.088-1.336,3.128-2.008c2.328-1.488,4.64-3,6.912-4.56c1.12-0.776,2.224-1.576,3.336-2.376
-	c2.152-1.544,4.28-3.112,6.376-4.72c1.104-0.848,2.192-1.712,3.28-2.584c2.064-1.648,4.104-3.336,6.112-5.056
-	c1.032-0.88,2.064-1.768,3.072-2.664c2.048-1.816,4.056-3.68,6.04-5.568c0.896-0.856,1.808-1.704,2.696-2.568
-	c2.144-2.112,4.24-4.272,6.296-6.464c0.656-0.704,1.336-1.384,1.992-2.088c2.68-2.92,5.304-5.896,7.832-8.944l0.008-0.008
-	C395.152,316.816,346.976,266.6,285.104,247.952z"
-                        />
-                      </svg>
+                      <img src="profil.svg" className="h-24 w-24" />
                     </div>
                   </div>
                 </div>
 
                 <div className="container mx-auto max-w-4xl">
-                  <div
-                    className="p-2 flex items-center justify-between mb-2 border-b-2 border-blue-600"
-                    
-                  >
-                    <h2 className="text-xl font-bold">Informations personnelles</h2>
+                  <div className="p-2 flex items-center justify-between mb-2 border-b-2 border-blue-600">
+                    <h2 className="text-xl font-bold">
+                      Informations personnelles
+                    </h2>
                   </div>
 
-                    <div className="p-2">
-                      Nom d'utilisateur : {username} <br />
-                      Email : {email} <br />
-                      <a href="/aide">
-                        <p className="text-blue-600 underline">
-                          Modifier mon mot de passe
-                        </p>
-                      </a>
-                    </div>
+                  <div className="p-2">
+                    Nom d'utilisateur : {username} <br />
+                    Email : {email} <br />
+                    <a href="/aide">
+                      <p className="text-blue-600 underline">
+                        Modifier mon mot de passe
+                      </p>
+                    </a>
+                  </div>
                 </div>
 
                 <div className="container mx-auto max-w-4xl">
@@ -292,33 +109,111 @@ export default function account({ loginEmail }) {
                     </div>
                   </div>
 
-                  {/* {open && (
+                  {open && (
                     <div className="p-2">
-                      <a href="#">
-                        <p className="text-blue-600 font-bold pb-3">
-                          • Paris - Marseille | 02/10/2021
-                        </p>
-                      </a>
-                      <a href="#">
-                        <p className="text-blue-600 font-bold pb-3">
-                          • Paris - Brest | 05/10/2021
-                        </p>
-                      </a>
-                      <a href="#">
-                        <p className="text-blue-600 font-bold pb-3">
-                          • Paris - Grenoble | 21/05/2020
-                        </p>
-                      </a>
+                      <div className="flex items-center"></div>
+                      <p>
+                        {/*Show all the save travels of a connected user*/}
+                        {data &&
+                          data.map((travels) => {
+                            if (travels.train == true) {
+                              return (
+                                <div>
+                                  <a
+                                    href={
+                                      "/JourneyTrain?from=" +
+                                      travels.depart +
+                                      "&to=" +
+                                      travels.arrivee +
+                                      "&datetime=" +
+                                      travels.date
+                                    }
+                                  >
+                                    <div className="flex justify-start">
+                                      <svg
+                                        className="text-blue-600 text-right -mt-2 mr-3"
+                                        fill="currentColor"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 512 512"
+                                        width="32"
+                                        height="32"
+                                        id="fi_3202922"
+                                      >
+                                        <g id="_12-T" data-name="12-T">
+                                          <g id="glyph">
+                                            <path d="M496,404H16a12,12,0,0,0,0,24H496a12,12,0,0,0,0-24Z" />
+                                            <circle cx="209" cy="367" r="12" />
+                                            <circle cx="319" cy="367" r="12" />
+                                            <path d="M200,268H432.554A124.162,124.162,0,0,0,320,196H190.8a35.853,35.853,0,0,1,9.2,24Z" />
+                                            <path d="M57,220a35.853,35.853,0,0,1,9.2-24H4v72H57Z" />
+                                            <path d="M93,344h.931l25.584,32.485A12,12,0,0,0,128,380h47.439a36,36,0,1,1,67.122,0h42.878a36,36,0,1,1,67.122,0H408.5a35.729,35.729,0,0,0,25.719-10.81c6.828-6.972,10.476-28.184,10.273-37.94L444.253,320H188V220a24.028,24.028,0,0,0-24-24H93a24.028,24.028,0,0,0-24,24V320A24.028,24.028,0,0,0,93,344Zm48-124h23l.015,100H141Zm-48,0h24V320H93Z" />
+                                            <path d="M200,308H443.418a123.062,123.062,0,0,0-6.393-29H200Z" />
+                                            <rect
+                                              x="4"
+                                              y="279"
+                                              width="53"
+                                              height="29"
+                                            />
+                                            <path d="M16,364H94.407l-6.594-8.373A36.054,36.054,0,0,1,57,320H4v32A12,12,0,0,0,16,364Z" />
+                                          </g>
+                                        </g>
+                                      </svg>
+                                      <p className="text-blue-600 font-bold pb-3 text-left">
+                                        • {travels.depart} - {travels.arrivee} |
+                                        {travels.date}
+                                      </p>
+                                    </div>
+                                  </a>
+                                </div>
+                              );
+                            } else {
+                              return (
+                                <div>
+                                  <a
+                                    href={
+                                      "/bilanVoiture?from=" +
+                                      travels.depart_link +
+                                      "&to=" +
+                                      travels.arrivee_link
+                                    }
+                                  >
+                                    <div className="flex justify-start">
+                                      <svg
+                                        className="text-blue-600 mr-3"
+                                        fill="currentColor"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 512 512"
+                                        width="32"
+                                        height="32"
+                                        id="fi_3202926"
+                                      >
+                                        <g id="_13-car" data-name="13-car">
+                                          <g id="glyph">
+                                            <path d="M120,236a52,52,0,1,0,52,52A52.059,52.059,0,0,0,120,236Zm0,76a24,24,0,1,1,24-24A24,24,0,0,1,120,312Z" />
+                                            <path d="M408,236a52,52,0,1,0,52,52A52.059,52.059,0,0,0,408,236Zm0,76a24,24,0,1,1,24-24A24,24,0,0,1,408,312Z" />
+                                            <path d="M477.4,193.04,384,176l-79.515-65.975A44.109,44.109,0,0,0,276.526,100H159.38a43.785,43.785,0,0,0-34.359,16.514L74.232,176H40A36.04,36.04,0,0,0,4,212v44a44.049,44.049,0,0,0,44,44h9.145a64,64,0,1,1,125.71,0h162.29a64,64,0,1,1,125.71,0H472a36.04,36.04,0,0,0,36-36V228.632A35.791,35.791,0,0,0,477.4,193.04ZM180,164a12,12,0,0,1-12,12H115.245a6,6,0,0,1-4.563-9.9l34.916-40.9A12,12,0,0,1,154.724,121H168a12,12,0,0,1,12,12Zm60,56H224a12,12,0,0,1,0-24h16a12,12,0,0,1,0,24Zm94.479-43.706-114.507-.266a12,12,0,0,1-11.972-12V133a12,12,0,0,1,12-12h57.548a12,12,0,0,1,7.433,2.58l53.228,42A6,6,0,0,1,334.479,176.294Z" />
+                                          </g>
+                                        </g>
+                                      </svg>
+                                      <p className="text-blue-600 font-bold pb-3">
+                                        • {travels.depart} - {travels.arrivee}
+                                      </p>
+                                    </div>
+                                  </a>
+                                </div>
+                              );
+                            }
+                          })}
+                      </p>
                     </div>
-                  )} */}
+                  )}
                 </div>
-                
               </div>
             </div>
           </div>
         </section>
       </main>
-      <HFooter />
+      <Footer />
     </div>
   );
 }

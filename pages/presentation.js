@@ -1,9 +1,11 @@
 import React from "react";
 import Head from "next/head";
-import Navbar from "../components/Navbar";
 import styles from "../styles/Home.module.css";
+import Footer from "../components/Footer";
 
-
+/* 
+  Presentation page display class
+ */
 export default class presentation extends React.Component {
   render() {
     return (
@@ -11,8 +13,6 @@ export default class presentation extends React.Component {
         <Head>
           <title>Presentation</title>
         </Head>
-        {/* En tete */}
-        <Navbar />
         <main>
           <section className={styles.heroindex + " py-12 min-h-96"}>
             <div className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center gap-8">
@@ -24,10 +24,10 @@ export default class presentation extends React.Component {
 
               <div className="relative">
                 <div className="rounded-lg pb-8 px-2 bg-white bg-opacity-80 border shadow-2xl">
-                  <div class="px-4 py-8 mb-4">
-                    <div class="flex gap-8 flex-row-reverse">
+                  <div className="px-4 py-8 mb-4">
+                    <div className="flex gap-8 flex-row-reverse">
                       <div>
-                        <h6 class="text-2xl font-bold">
+                        <h6 className="text-2xl font-bold">
                           Remplissez le formulaire de recherche
                         </h6>
                         <p>
@@ -39,7 +39,7 @@ export default class presentation extends React.Component {
                       </div>
                       <div>
                         <svg
-                          class="text-blue-500 w-24 h-24"
+                          className="text-blue-500 w-24 h-24"
                           viewBox="0 0 24 24"
                         >
                           <path
@@ -51,9 +51,9 @@ export default class presentation extends React.Component {
                     </div>
                   </div>
 
-                  <div class="">
+                  <div className="">
                     <svg
-                      class="mx-auto h-12 text-yellow-400"
+                      className="mx-auto h-12 text-yellow-400"
                       viewBox="0 0 154 136"
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -64,10 +64,10 @@ export default class presentation extends React.Component {
                     </svg>
                   </div>
 
-                  <div class="px-4 py-8 mb-4 text-right">
-                    <div class="flex gap-8">
+                  <div className="px-4 py-8 mb-4 text-right">
+                    <div className="flex gap-8">
                       <div>
-                        <h6 class="text-2xl font-bold">
+                        <h6 className="text-2xl font-bold">
                           Decouvrez nos solutions de voyages
                         </h6>
                         <p>
@@ -78,7 +78,7 @@ export default class presentation extends React.Component {
                       </div>
                       <div>
                         <svg
-                          class="text-blue-500 w-24 h-24"
+                          className="text-blue-500 w-24 h-24"
                           version="1.1"
                           id="fi_883777"
                           xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +143,7 @@ export default class presentation extends React.Component {
 
                   <div style={{ transform: "rotatey(180deg)" }}>
                     <svg
-                      class="mx-auto h-12 text-yellow-400"
+                      className="mx-auto h-12 text-yellow-400"
                       viewBox="0 0 154 136"
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -154,10 +154,10 @@ export default class presentation extends React.Component {
                     </svg>
                   </div>
 
-                  <div class="px-4 py-8 mb-4">
-                    <div class="flex gap-8 flex-row-reverse">
+                  <div className="px-4 py-8 mb-4">
+                    <div className="flex gap-8 flex-row-reverse">
                       <div>
-                        <h6 class="text-2xl font-bold">
+                        <h6 className="text-2xl font-bold">
                           Selectionnez le voyage le plus adapté
                         </h6>
                         <p>
@@ -172,7 +172,7 @@ export default class presentation extends React.Component {
                           enableBackground="new 0 0 24 24"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
-                          class="text-blue-500 w-24 h-24"
+                          className="text-blue-500 w-24 h-24"
                           fill="currentcolor"
                         >
                           <path d="m18.677 23.994c-.974 0-2.102-.308-3.398-.923-1.446-.686-2.143-.662-2.604-.64-.371.011-.758.029-1.14-.353-.134-.134-.743-.864.454-2.061.597-.597 1.416-.769 2.127-.779l-4.146-4.146c-.275-.274-.427-.641-.426-1.03s.153-.754.429-1.029.641-.428 1.03-.429h.002c.388 0 .753.151 1.028.427l1.722 1.723c.069-.138.161-.265.273-.376.395-.396.961-.518 1.462-.362.07-.198.185-.385.343-.543.543-.544 1.411-.568 1.981-.075.068-.138.16-.266.274-.38.569-.569 1.492-.57 2.06-.003l2.7 2.7c1.695 1.694 1.506 4.15-.461 6.118-.004.004-.008.008-.013.013l-1.117 1.116c-.696.688-1.552 1.032-2.58 1.032zm-5.731-2.569c.546 0 1.385.09 2.762.742 2.985 1.417 4.195.729 4.847.086l1.126-1.126c.003-.004.007-.007.01-.01 1.192-1.206 2.009-3.137.459-4.687l-2.708-2.708c-.177-.177-.467-.175-.646.003-.178.178-.18.467-.004.645l.001.001.675.675c.098.098.146.226.146.354s-.049.256-.146.354c-.195.195-.512.195-.707 0l-1.575-1.575c-.177-.177-.467-.176-.646.003s-.18.468-.002.646l1.125 1.125c.098.098.146.226.146.354s-.049.256-.146.354c-.195.195-.512.195-.707 0l-1.575-1.575c-.177-.177-.466-.175-.646.003-.087.087-.135.203-.135.325 0 .121.047.235.132.32l1.125 1.125c.098.098.146.226.146.354s-.049.256-.146.354c-.195.195-.512.195-.707 0l-3.825-3.824c-.086-.086-.2-.134-.321-.134-.122.001-.237.049-.324.136s-.135.202-.136.324c0 .121.047.235.133.321l5.175 5.175c.162.161.193.412.076.608s-.354.288-.571.225c-.019-.005-1.81-.519-2.662.331-.387.388-.444.626-.434.679.042.029.052.04.374.027.093-.006.196-.01.311-.01zm5.498-8.053h.01z" />
@@ -191,7 +191,7 @@ export default class presentation extends React.Component {
 
                   <div>
                     <svg
-                      class="mx-auto h-12 text-yellow-400"
+                      className="mx-auto h-12 text-yellow-400"
                       viewBox="0 0 154 136"
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -202,10 +202,10 @@ export default class presentation extends React.Component {
                     </svg>
                   </div>
 
-                  <div class="px-4 py-8 mb-4 text-right">
-                    <div class="flex gap-8">
+                  <div className="px-4 py-8 mb-4 text-right">
+                    <div className="flex gap-8">
                       <div>
-                        <h6 class="text-2xl font-bold">
+                        <h6 className="text-2xl font-bold">
                           Sauvegardez et accedez au bilan de votre voyage
                         </h6>
                         <p>
@@ -220,7 +220,7 @@ export default class presentation extends React.Component {
                           enableBackground="new 0 0 512 512"
                           viewBox="0 0 512 512"
                           xmlns="http://www.w3.org/2000/svg"
-                          class="text-blue-500 w-24 h-24"
+                          className="text-blue-500 w-24 h-24"
                           fill="currentColor"
                         >
                           <g id="XMLID_2012_">
@@ -548,11 +548,7 @@ export default class presentation extends React.Component {
             </div>
           </section>
         </main>
-        <footer class="bg-gray-200 p-4 text-center">
-          <div class="container mx-auto m-0 relative">
-            <p>© Copyright 2021, HangOut</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     );
   }

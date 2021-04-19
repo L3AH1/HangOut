@@ -1,12 +1,14 @@
 import React from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import {envies, environnements} from "./api/globalVariables";
-import Navbar from "../components/Navbar";
+import { envies, environnements, villes } from "./api/globalVariables";
 import Suggestion from "../components/Suggestions";
-import AutocompletionAddress from "../components/AutocompletionAddress";
-import HFooter from "../components/HFooter";
+import Footer from "../components/Footer";
+import Autocomplete from "../components/Autocomplete";
 
+/* 
+  Home page display class
+ */
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -18,33 +20,47 @@ export default class Home extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleSubmit(event) {}
+  handleSubmit(event) {
+  }
 
   render() {
-    const environnementOpt = environnements.map((env) =>
-        <option key={env}
-                value={env} >
+
+    // Constant who save a balise option with all the environnement options
+    const environnementOpt = environnements.map((env) => (
+        <option key={env} value={env}>
           {env}
         </option>
-    );
-    const envieOpt = envies.map((env) =>
-        <option key={env}
-                value={env} >
+    ));
+
+    // Constant who save a balise option with all the desires options
+    const envieOpt = envies.map((env) => (
+        <option key={env} value={env}>
           {env}
         </option>
-    );
+    ));
+
+    // Get the current date and save it into the variable today
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    const yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    today = yyyy + "-" + mm + "-" + dd;
+
     return (
         <div className={styles.container}>
           <Head>
             <title>HangOut</title>
           </Head>
-          {/* En tete */}
-          {/* <Header /> */}
-          <Navbar />
-          {/* <Navbartest/> */}
           <main>
             <section className={styles.hero + " py-12 min-h-96"}>
               <div className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center gap-8">
+                <img src="Logo_seul.svg" className=" w-24 text-center"  alt="logo HangOut"/>
                 <div className="hero__heading text-center">
                   <h2 className="text-5xl text-white font-extrabold max-w-prose mb-2">
                     Redécouvrez la France
@@ -55,11 +71,15 @@ export default class Home extends React.Component {
                   </p>
                 </div>
                 <div className="hero__form relative">
-                  <form action="/HSecondary" onSubmit={this.handleSubmit}>
-                    <div className="rounded-lg overflow-hidden pb-8 px-2 bg-white border shadow-2xl">
+                  <form
+                      action="/search"
+                      autoComplete="off"
+                      onSubmit={this.handleSubmit}
+                  >
+                    <div className="rounded-lg overflow-hidden pt-2 pb-8 px-2 bg-white border shadow-2xl">
                       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8">
                         {/* VILLE */}
-                        <div className="border border-gray-200 rounded-lg w-50 h-12 mb-3 mt-5 ml-3 p-5 flex items-center gap-2 ">
+                        <div className="border border-gray-200 rounded-lg w-50 h-12 m-3 p-5 flex items-center gap-2 ">
                           <div>
                             <svg
                                 className="w-8 text-blue-400"
@@ -72,25 +92,14 @@ export default class Home extends React.Component {
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <label
-                                className="block text-blue-400 font-bold text-xs uppercase tracking-wide"
-                            >
-                              Ville
+                            <label className="block text-blue-400 font-bold text-xs uppercase tracking-wide">
+                              Ville de départ
                             </label>
-                            <input
-                                id="ville"
-                                name="ville"
-                                type="text"
-                                placeholder="ex. Nice"
-                                defaultValue={this.state.ville}
-                                className="focus:outline-none"
-                                required
-                                autoComplete="off"
-                            />
+                            <Autocomplete suggestions={villes} />
                           </div>
                         </div>
                         {/* ENVIRONNEMENT */}
-                        <div className="border border-gray-200 rounded-lg w-50 h-12 mb-3 mt-5 ml-3 p-5 flex items-center gap-2">
+                        <div className="border border-gray-200 rounded-lg w-50 h-12 m-3 p-5 flex items-center gap-2">
                           <div>
                             <svg
                                 className="w-8 text-blue-400"
@@ -103,15 +112,13 @@ export default class Home extends React.Component {
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <label
-                                className="block text-blue-400 font-bold text-xs uppercase tracking-wide"
-                            >
+                            <label className="block text-blue-400 font-bold text-xs uppercase tracking-wide">
                               Environnement
                             </label>
                             <select
                                 name="environnement"
                                 id="environnement"
-                                className="focus:outline-none w-full"
+                                className="focus:outline-none w-full bg-transparent"
                                 required
                             >
                               {environnementOpt}
@@ -121,7 +128,7 @@ export default class Home extends React.Component {
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8">
                         {/* ENVIES */}
-                        <div className="border border-gray-200 rounded-lg w-50 h-12 mt-3 mb-5 ml-3 p-5 flex items-center gap-2">
+                        <div className="border border-gray-200 rounded-lg w-50 h-12 m-3 p-5 flex items-center gap-2">
                           <div>
                             <svg
                                 className="w-8 text-blue-400"
@@ -134,15 +141,13 @@ export default class Home extends React.Component {
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <label
-                                className="block text-blue-400 font-bold text-xs uppercase tracking-wide"
-                            >
+                            <label className="block text-blue-400 font-bold text-xs uppercase tracking-wide">
                               Envies
                             </label>
                             <select
                                 name="envie"
                                 id="envie"
-                                className="focus:outline-none w-full"
+                                className="focus:outline-none w-full bg-transparent"
                                 required
                             >
                               {envieOpt}
@@ -150,7 +155,7 @@ export default class Home extends React.Component {
                           </div>
                         </div>
                         {/* DEPART */}
-                        <div className="border border-gray-200 rounded-lg w-50 h-12 mt-3 ml-3 mb-5 p-5 flex items-center gap-2">
+                        <div className="border border-gray-200 rounded-lg w-50 h-12 m-3 mb-5 p-5 flex items-center gap-2">
                           <div>
                             <svg
                                 className="w-8 text-blue-400"
@@ -163,23 +168,22 @@ export default class Home extends React.Component {
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <label
-                                className="block text-blue-400 font-bold text-xs uppercase tracking-wide"
-                            >
-                              Départ
+                            <label className="block text-blue-400 font-bold text-xs uppercase tracking-wide">
+                              Date de départ
                             </label>
                             <input
                                 id="date_depart"
                                 name="date_depart"
                                 type="date"
-                                defaultValue="2021-03-15T23:44"
+                                defaultValue={today}
                                 className="focus:outline-none appearance-none"
                                 required
+                                min={today}
                             />
                           </div>
                         </div>
                       </div>
-                      <button className="focus:outline-none bg-gradient-to-r from-blue-400 to-blue-800 rounded-xl absolute text-white font-bold px-7 py-4 left-1/2 transform -translate-x-1/2">
+                      <button className="focus:outline-none bg-gradient-to-br from-green-200 via-blue-400 to-blue-600 rounded-xl absolute text-white font-bold px-7 py-4 left-1/2 transform -translate-x-1/2">
                         RECHERCHER
                       </button>
                     </div>
@@ -194,7 +198,7 @@ export default class Home extends React.Component {
               </div>
             </section>
 
-            <HFooter />
+            <Footer />
           </main>
         </div>
     );

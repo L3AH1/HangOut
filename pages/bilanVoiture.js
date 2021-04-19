@@ -1,7 +1,7 @@
-import Navbar from "../components/Navbar";
 import React from "react";
 import Itinerary from "../components/Itinerary";
 import Head from "next/head";
+import Footer from "../components/Footer";
 
 export default class BilanVoiture extends React.Component {
   constructor(props) {
@@ -21,12 +21,12 @@ export default class BilanVoiture extends React.Component {
         <Head>
           <title>HangOut</title>
         </Head>
-        <Navbar />
         <Itinerary
           //mettre les villes de depart et arrivee dans des props
           villeDepart=""
           villeRetour=""
         />
+        <Footer />
       </div>
     );
   }

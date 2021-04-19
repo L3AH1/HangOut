@@ -1,21 +1,21 @@
 import React, { useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
-import Footer from "../components/HFooter";
+import Footer from "../components/Footer";
+import Head from "next/head";
+import Cookies from "js-cookie";
 
+/**
+ * Signin Page
+ */
 export default function signin({ setLoginEmail }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    console.log(setLoginEmail);
-    setLoginEmail(email);
-    router.push("/account");
-  };
-
+  /**
+   * Function handleEmailChange that get user's email
+   */
   const handleEmailChange = useCallback(
     (event) => {
       setEmail(event.target.value);
@@ -23,6 +23,9 @@ export default function signin({ setLoginEmail }) {
     [setEmail]
   );
 
+  /**
+   * Function handlePasswordChange that get user's email
+   */
   const handlePasswordChange = useCallback(
     (event) => {
       setPassword(event.target.value);
@@ -30,27 +33,38 @@ export default function signin({ setLoginEmail }) {
     [setPassword]
   );
 
+  /**
+   * Function handleSubmit that submit the form and find if a user exist in the dataBase
+   */
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    /**
+     * Regex that check if the email provide is in the right format
+     */
     const valid_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (email.length < 254 && valid_email.test(email) === false) {
       alert("Veuillez entrer une adresse e-mail valide 😄");
       return;
     }
 
-    console.log(email, password);
+    /**
+     * Convert body to JSON
+     */
     const body = JSON.stringify({
       email,
       password,
     });
 
+    /**
+     * Send user's email and password to identify him
+     */
     fetch("http://localhost:3000/api/users/signin", {
       method: "POST",
       headers: new Headers({
         "Content-Type": "application/json",
       }),
-      body: JSON.stringify(body), // convertit un objet en string
+      body: JSON.stringify(body),
     })
       .then((res) => res.json())
       .then((res) => {
@@ -70,16 +84,23 @@ export default function signin({ setLoginEmail }) {
           return;
         }
 
+        /**
+         * If a user is found then create a Cookie and redirect him into the account page
+         */
         if (res.success) {
-          setLoginEmail(email)
-          router.push("/account", "/profil")
+          setLoginEmail(email);
+          router.push("/account");
+          Cookies.set("email", email);
+          Cookies.set("connected", "true");
         }
       });
   };
 
   return (
     <div>
-      <Navbar />
+      <Head>
+        <title>Connexion</title>
+      </Head>
       <div className="flex md:flex-row min-h-screen">
         <div className="px-8 py-12 w-full md:w-auto">
           <div className="mb-12">
@@ -87,7 +108,7 @@ export default function signin({ setLoginEmail }) {
               Connectez-vous
             </h2>
           </div>
-          <div className>
+          <div>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label
@@ -123,16 +144,7 @@ export default function signin({ setLoginEmail }) {
                   onChange={handlePasswordChange}
                 />
               </div>
-              <div className="mb-4">
-                <input
-                  type="checkbox"
-                  name="remind"
-                  id="remind"
-                  className="mr-2"
-                />
-                <label htmlFor="remind">Se souvenir de moi</label>
-              </div>
-              <div className>
+              <div>
                 <div className="text-center">
                   <button
                     onClick={handleSubmit}
@@ -141,7 +153,7 @@ export default function signin({ setLoginEmail }) {
                     Se connecter
                   </button>
                   <a
-                    className="block py-4 text-blue-600 focus:outline-none"
+                    className="block pt-4 text-blue-600 focus:outline-none"
                     href="/aide"
                   >
                     Mot de passe oublié
