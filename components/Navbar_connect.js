@@ -1,21 +1,18 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
-
-/**
- * Function Navbar_connect
- */
 export default function Navbar_connect({ onDeconnect }) {
   const [open, setOpen] = useState(false);
 
   const handleClick = (e) => {
-    const tabs = document.getElementsByClassName("onglet");
+    const onglets = document.getElementsByClassName("onglet");
     const blueBold = ["text-blue-600", "font-light"];
-    for (let i = 0; i < tabs.length; i++) {
-      if (e.target === tabs[i]) {
-        tabs[i].classList.add(...blueBold);
+    for (let i = 0; i < onglets.length; i++) {
+      if (e.target === onglets[i]) {
+        onglets[i].classList.add(...blueBold);
       } else {
-        tabs[i].classList.remove(...blueBold);
+        onglets[i].classList.remove(...blueBold);
       }
     }
   };
@@ -51,7 +48,7 @@ export default function Navbar_connect({ onDeconnect }) {
           >
             <ul className="">
               <li className="py-2">
-                <a className="flex gap-4 py-2 uppercase" href="/" onClick={() => setOpen(!open)}>
+                <a className="flex gap-4 py-2 uppercase" href="/">
                   <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -63,7 +60,7 @@ export default function Navbar_connect({ onDeconnect }) {
               </li>
               <li className="py-2">
                 <Link href="/presentation">
-                  <a className="flex gap-4 py-2 uppercase" onClick={() => setOpen(!open)}>
+                  <a className="flex gap-4 py-2 uppercase">
                     <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -76,7 +73,7 @@ export default function Navbar_connect({ onDeconnect }) {
               </li>
               <li className="py-2">
                 <Link href="/aide">
-                  <a className="flex gap-4 py-2 uppercase" onClick={() => setOpen(!open)}>
+                  <a className="flex gap-4 py-2 uppercase">
                     <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -89,7 +86,7 @@ export default function Navbar_connect({ onDeconnect }) {
               </li>
               <li className="py-2">
                 <Link href="/aide">
-                  <a className="flex gap-4 py-2 uppercase" onClick={() => setOpen(!open)}>
+                  <a className="flex gap-4 py-2 uppercase">
                     <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -102,7 +99,7 @@ export default function Navbar_connect({ onDeconnect }) {
               </li>
               <li className="flex flex-col md:flex-row gap-4">
                 <Link href="/account">
-                  <a className="flex flex-col md:flex-row gap-4" onClick={() => setOpen(!open)}>
+                  <a className="flex flex-col md:flex-row gap-4">
                     <button className="focus:outline-none text-white px-4 py-2 font-bold flex-1 flex gap-2 items-center bg-gradient-to-r from-blue-400 to-blue-800 rounded-xl">
                       <svg className="w-6 h-6 text-white" viewBox="0 0 24 24">
                         <path

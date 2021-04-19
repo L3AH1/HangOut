@@ -1,20 +1,12 @@
 import { connectToDatabase } from "../../../util/mongodb";
 
-/**
- * Async function
- * @param {req} request the request.
- * @param {res} result the answer.
- * @returns {res.json} a answer formatted in json.
- */
 export default async (req, res) => {
   if (req.method === "POST") {
     const { username, email, password } = JSON.parse(req.body);
 
     const { db } = await connectToDatabase();
 
-    /**
-     * Check if the user's email didn't already exist
-     */
+    // Verifier que l'adresse email n'existe pas
     let error = false;
     let existingUsers = await db.collection("users").find({ email }).toArray();
 
@@ -38,4 +30,13 @@ export default async (req, res) => {
   } else {
     res.json({ error: "Method not allowed" });
   }
+
+  //   const { db } = await connectToDatabase();
+  //   const users = await db
+  //     .collection("users")
+  //     .find({})
+  //     .sort({ metacritic: -1 })
+  //     .limit(20)
+  //     .toArray();
+  //   res.json(users);
 };

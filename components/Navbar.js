@@ -1,42 +1,38 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-/**
- * Function Navbar
- * @returns a default navigation bar.
- */
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const handleClick = (e) => {
-    const tabs = document.getElementsByClassName("onglet");
+    const onglets = document.getElementsByClassName("onglet");
     const blueBold = ["text-blue-600", "font-light"],
       blue = ["from-blue-400", "to-blue-800"],
       yellow = ["from-yellow-500", "to-yellow-400"];
-    for (let i = 0; i < tabs.length; i++) {
-      if (e.target === tabs[i]) {
+    for (let i = 0; i < onglets.length; i++) {
+      if (e.target === onglets[i]) {
         if (
           e.target === document.getElementById("inscription") ||
           e.target === document.getElementById("connexion")
         ) {
-          if (tabs[i] === document.getElementById("connexion")) {
-            tabs[i].classList.remove(...blue);
-            tabs[i].classList.add(...yellow);
+          if (onglets[i] === document.getElementById("connexion")) {
+            onglets[i].classList.remove(...blue);
+            onglets[i].classList.add(...yellow);
           }
         } else {
-          tabs[i].classList.add(...blueBold);
+          onglets[i].classList.add(...blueBold);
         }
       } else {
         if (
-          tabs[i] === document.getElementById("inscription") ||
-          tabs[i] === document.getElementById("connexion")
+          onglets[i] === document.getElementById("inscription") ||
+          onglets[i] === document.getElementById("connexion")
         ) {
-          if (tabs[i] === document.getElementById("connexion")) {
-            tabs[i].classList.remove(...yellow);
-            tabs[i].classList.add(...blue);
+          if (onglets[i] === document.getElementById("connexion")) {
+            onglets[i].classList.remove(...yellow);
+            onglets[i].classList.add(...blue);
           }
         } else {
-          tabs[i].classList.remove(...blueBold);
+          onglets[i].classList.remove(...blueBold);
         }
       }
     }
@@ -44,7 +40,7 @@ export default function Navbar() {
 
   return (
     <header>
-      <nav className="container mx-auto relative flex justify-between shadow-lg w-full">
+      <nav className="container mx-auto relative flex justify-between shadow-lg">
         <Link href="/">
           <a className="text-2xl font-bold py-2 pl-4 lg:pl-2">
             <div id="logo">
@@ -73,7 +69,7 @@ export default function Navbar() {
           >
             <ul className="">
               <li className="py-2">
-                <a className="flex gap-4 py-2 uppercase " href="/" onClick={() => setOpen(!open)}>
+                <a className="flex gap-4 py-2 uppercase " href="/">
                   <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -85,7 +81,7 @@ export default function Navbar() {
               </li>
               <li className="py-2">
                 <Link href="/presentation">
-                  <a className="flex gap-4 py-2 uppercase" onClick={() => setOpen(!open)}>
+                  <a className="flex gap-4 py-2 uppercase">
                     <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -98,7 +94,7 @@ export default function Navbar() {
               </li>
               <li className="py-2">
                 <Link href="/aide">
-                  <a className="flex gap-4 py-2 uppercase" onClick={() => setOpen(!open)}>
+                  <a className="flex gap-4 py-2 uppercase">
                     <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -111,7 +107,7 @@ export default function Navbar() {
               </li>
               <li className="py-2">
                 <Link href="/aide">
-                  <a className="flex gap-4 py-2 uppercase" onClick={() => setOpen(!open)}>
+                  <a className="flex gap-4 py-2 uppercase">
                     <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -124,7 +120,7 @@ export default function Navbar() {
               </li>
               <li className="flex flex-col md:flex-row gap-4">
                 <Link href="/signin">
-                  <a className="flex flex-col md:flex-row gap-4" onClick={() => setOpen(!open)}>
+                  <a className="flex flex-col md:flex-row gap-4">
                     <button className="focus:outline-none text-white px-4 py-2 font-bold flex-1 flex gap-2 items-center bg-gradient-to-r from-blue-400 to-blue-800 rounded-xl hover:from-yellow-500 hover:to-yellow-400">
                       <svg className="w-6 h-6 text-white" viewBox="0 0 24 24">
                         <path
@@ -137,7 +133,7 @@ export default function Navbar() {
                   </a>
                 </Link>
                 <Link href="/signup">
-                  <a className="flex flex-col md:flex-row gap-4" onClick={() => setOpen(!open)}>
+                  <a className="flex flex-col md:flex-row gap-4">
                     <button className="focus:outline-none text-blue-600 px-4 py-2 font-bold border border-blue-600 flex-1 flex gap-2 items-center rounded-xl">
                       <svg
                         className="w-6 h-6 text-blue-600"

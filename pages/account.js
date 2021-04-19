@@ -5,26 +5,12 @@ import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
-/**
- * Account function
- * @param {open} request the request.
- * @param {email} result the answer.
- * @returns a answer formatted in json.
- */
-export default function account() {
-  // Constant who check if the value open is true or false
+export default function account({ loginEmail }) {
   const [open, setOpen] = useState(false);
-  // Constant who get the email from the application's cookies
   const [email, setEmail] = useState(Cookies.get("email"));
-  // Constant who get the email from the application's cookies
   const [username, setUsername] = useState(Cookies.get("username"));
-  // Constant for save data
   const [data, setData] = useState([]);
 
-  /**
- * Function useEffect
- * @returns the users username, email and data from the database
- */
   useEffect(() => {
     console.log({ email });
     console.log({ username });
@@ -36,7 +22,7 @@ export default function account() {
       headers: new Headers({
         "Content-Type": "application/json",
       }),
-      body: JSON.stringify(body), // convert an object into a string
+      body: JSON.stringify(body), // convertit un objet en string
     })
       .then((res) => res.json())
       .then((res) => {
@@ -113,8 +99,7 @@ export default function account() {
                     <div className="p-2">
                       <div className="flex items-center"></div>
                       <p>
-                        {/*Show all the save travels of a connected user*/}
-                        {data &&
+                        {data.length &&
                           data.map((travels) => {
                             if (travels.train == true) {
                               return (
