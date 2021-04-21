@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }) {
     Cookies.remove("connected");
     setLoginEmail(null);
     Cookies.remove("email");
-    Cookies.remove("username")
+    Cookies.remove("username");
     router.replace("/");
   };
 

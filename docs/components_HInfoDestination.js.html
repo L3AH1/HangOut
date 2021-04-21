@@ -29,16 +29,20 @@
             <pre class="prettyprint source linenums"><code>import React from "react";
 import { VILLES } from "../pages/api/Ville";
 
-/**
- * Classe d'affichage des résultats sur la deuxième interface.
- * Récupère un objet par ses props qui contient résultats d'une requête formatée.
- * Permet le lien vers la page des résultats
- */
 
-class HDestination extends React.Component {
+/**
+ * Displays travel suggestions after the search
+ * @return {JSX.Element} a card that displays global information of one travel suggestion
+ */
+ class HDestination extends React.Component {
   constructor(props) {
     super(props);
   }
+  /**
+   * Finds the city's image url by its name
+   * @param name name of the city
+   * @return {String} the image's url
+   */
   findUrl(name) {
     for (var key in VILLES) {
       if (VILLES[key].name === name.split(" (")[0]) {
@@ -46,6 +50,11 @@ class HDestination extends React.Component {
       }
     }
   }
+  /**
+   * Finds advantage of a city by its name
+   * @param name name of the city
+   * @return {String} the city's advantages
+   */
   findAdvantage(name) {
     for (var key in VILLES) {
       if (VILLES[key].name === name.split(" (")[0]) {
@@ -56,18 +65,20 @@ class HDestination extends React.Component {
 
   render() {
     let name, duree, cost, src, avantage;
-    //S'il faut afficher les informations en voiture
+    //Get information by car
     if (this.props.infoCar) {
       const info = this.props.infoCar;
       let t = info.duree,
         h = Math.round(t / 3600),
         m = Math.round((t % 3600) / 60);
       name = info.destinationArrivee.name;
-      duree = h + "h" + m;
+      duree = h + "h" + m.toString().padStart(2,"0");
       cost = info.coutTotal + "€";
       avantage = this.findAdvantage(name);
       src = info.destinationArrivee.img;
-    } else {
+    }
+    //Get information by train
+    else {
       const propsJson = this.props.journey;
       name =
         propsJson !== undefined
@@ -80,12 +91,10 @@ class HDestination extends React.Component {
       src = propsJson !== undefined ? this.findUrl(name) : this.props.src;
       avantage = propsJson !== undefined ? this.findAdvantage(name) : " ";
     }
-    //Url préparé pour passer les données
-    //const url = "/HJourneyTrain?from=" + this.props.journey.destinationDepart + "&amp;to=" + this.props.journey.destinationArrivee + "&amp;datetime=" + this.props.journey.heureDepart;
     if (name !== this.props.name) {
       return (
         &lt;div className="relative group bg-white flex flex-col justify-stretch shadow-lg rounded-2xl max-w-xs w-40 max-h-xs">
-          &lt;div classname="ml-3">
+          &lt;div className="ml-3">
             &lt;div className="group text-blue-700 text-opacity-0 group-hover:text-opacity-80 duration-300 absolute h-16 w-16 z-10 my-6 mx-12">
               &lt;p className="bg-opacity-0 transition ease-in duration-200 text-xl font-bold ">
                 Voir
@@ -108,22 +117,22 @@ class HDestination extends React.Component {
           &lt;/div>
           &lt;div className="text-black text-sm text-left px-3 py-2 flex-3 flex flex-col">
             &lt;div className="flex flex-row justify-between">
-              &lt;p className="font-bold">Duree&lt;/p>
+              &lt;p className="font-bold">Durée&lt;/p>
               &lt;p className="italic ml-2">{duree}&lt;/p>
             &lt;/div>
             &lt;div className="flex flex-row justify-between">
-              &lt;p className="font-bold">Coût&lt;/p>
+              &lt;p className="font-bold">{cost != undefined ? "Coût" : ""}&lt;/p>
               &lt;p className="italic ml-2">{cost}&lt;/p>
             &lt;/div>
             &lt;div className="text-black text-sm mr-2 mb-1 text-left h-10 overflow-y-scroll">
-              &lt;p className="font-bold">Avantage&lt;/p>
+              &lt;p className="font-bold">Avantage(s)&lt;/p>
               &lt;p>{avantage}&lt;/p>
             &lt;/div>
           &lt;/div>
         &lt;/div>
       );
     } else {
-      return &lt;div>&lt;/div>;
+      return &lt;div/>;
     }
   }
 }
@@ -139,13 +148,13 @@ export default HDestination;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#formattageVille">formattageVille</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#citiesCoords">citiesCoords</a></li><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCityCoordsByName">findCityCoordsByName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#findDuration">findDuration</a></li><li><a href="global.html#formatData">formatData</a></li><li><a href="global.html#formatJsonSncf">formatJsonSncf</a></li><li><a href="global.html#formattingCity">formattingCity</a></li><li><a href="global.html#formattingDate">formattingDate</a></li><li><a href="global.html#formattingDuration">formattingDuration</a></li><li><a href="global.html#getcout">getcout</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getTravels">getTravels</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#requestViaMichelin">requestViaMichelin</a></li><li><a href="global.html#toCities">toCities</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 15:20:50 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Apr 19 2021 23:55:03 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

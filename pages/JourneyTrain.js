@@ -26,7 +26,7 @@ export default class JourneyTrain extends React.Component {
   }
   /**
    * Get data from Navitia's request
-   * @param {Object} data 
+   * @param {Object} data
    */
   getData(data) {
     const API_KEY = "d7257033-908e-4678-9909-f9ac7fa6009a";
@@ -125,7 +125,7 @@ export default class JourneyTrain extends React.Component {
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
-          alert("Vous n'etes pas connecté 😯");
+          alert("Vous n'êtes pas connecté 😯");
         } else {
           alert("Votre voyage a bien été sauvegardé ! 😁");
         }
@@ -133,8 +133,8 @@ export default class JourneyTrain extends React.Component {
   }
 
   /**
-   * Fonction printStep, affichage d'une étape du voyage
-   * @param {objet contenant le résumé d'une étape du voyage choisi} step
+   * Displays step's itinerary
+   * @param {Object} step
    * @returns
    */
   printStep(step) {
@@ -199,7 +199,7 @@ export default class JourneyTrain extends React.Component {
 
         <div>
           <div className="container mx-auto relative flex items-center justify-between shadow-lg p-3">
-            <h1 className="text-2xl font-bold text-blue-700">
+            <h1 className="text-3xl font-bold text-blue-500">
               Votre itinéraire :{" "}
               {this.state.journey.destinationDepart != undefined
                 ? this.state.journey.destinationDepart.split(" (")[0]
@@ -366,12 +366,21 @@ export default class JourneyTrain extends React.Component {
           </div>
 
           <section className={style.herotrain + " py-12 min-h-96"}>
+            <div className="container max-w-4xl ml-auto pr-4 h-full flex flex-col gap-8">
+              <div className="rounded-lg px-2 bg-gray-100 bg-opacity-90 border shadow-2xl self-end text-center flex">
+                <img className="h-8 p-1" src="information.svg" />
+                <p className="m-2 font-semibold text-gray-600">
+                  Les prix de trains indiqués ne proviennent
+                  <br /> que d'un aperçu du coût et ne représentent
+                  <br /> qu'une estimation du prix de votre voyage
+                </p>
+              </div>
+            </div>
             <div className="flex items-center justify-between py-9 ">
               <div className="container mx-auto px-4 h-full flex flex-col items-center gap-8">
                 <div className="relative">
                   <div className="rounded-lg px-2 bg-white border shadow-2xl">
                     <div className="px-4 py-8 mb-4 ">
-                      {/*Display of steps, ugly but it works*/}
                       {this.state.journey.itinerary != undefined
                         ? this.state.journey.itinerary[0] != undefined
                           ? this.printStep(this.state.journey.itinerary[0])
@@ -481,7 +490,7 @@ export default class JourneyTrain extends React.Component {
 
           <section className={style.herotrainbilan + " pb-36"}>
             <div className=" pt-7 ml-5">
-              <p className="font-bold text-3xl text-blue-600">
+              <p className="font-bold text-3xl text-blue-500">
                 Bilan de votre trajet :
               </p>
             </div>

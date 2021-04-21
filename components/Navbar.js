@@ -3,11 +3,16 @@ import Link from "next/link";
 
 /**
  * Function Navbar
- * @returns a default navigation bar.
+ * @returns {JSX.Element} a default navigation bar.
  */
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
+  /**
+   * Changes the styles of a element after a click
+   * @function
+   * @param {Event} e event on click
+   */
   const handleClick = (e) => {
     const tabs = document.getElementsByClassName("onglet");
     const blueBold = ["text-blue-600", "font-light"],
@@ -138,9 +143,9 @@ export default function Navbar() {
                 </Link>
                 <Link href="/signup">
                   <a className="flex flex-col md:flex-row gap-4" onClick={() => setOpen(!open)}>
-                    <button className="focus:outline-none text-blue-600 px-4 py-2 font-bold border border-blue-600 flex-1 flex gap-2 items-center rounded-xl">
+                    <button className="focus:outline-none text-blue-600 hover:text-yellow-500 hover:border-yellow-500 px-4 py-2 font-bold border border-blue-600 flex-1 flex gap-2 items-center rounded-xl">
                       <svg
-                        className="w-6 h-6 text-blue-600"
+                        className="w-6 h-6"
                         viewBox="0 0 24 24"
                       >
                         <path
@@ -204,7 +209,7 @@ export default function Navbar() {
                 <Link href="/signup">
                   <a>
                     <button
-                      className="onglet focus:outline-none flex-auto text-blue-600 px-4 py-2 font-bold border border-blue-600 flex gap-2 items-center rounded-xl focus:outline-none"
+                      className="onglet focus:outline-none flex-auto text-blue-600 hover:text-white hover:text-yellow-500  px-4 py-2 font-bold border border-blue-600 hover:border-yellow-500 flex gap-2 items-center rounded-xl focus:outline-none"
                       id="inscription"
                       onClick={handleClick}
                     >

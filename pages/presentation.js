@@ -18,7 +18,7 @@ export default class presentation extends React.Component {
             <div className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center gap-8">
               <div className="text-center">
                 <h2 className="text-4xl font-extrabold max-w-prose mb-2 text-white">
-                  HangOut: Des propositions de voyages adaptées a vos envies !
+                  HangOut: Des propositions de voyages adaptées à vos envies !
                 </h2>
               </div>
 
@@ -32,8 +32,8 @@ export default class presentation extends React.Component {
                         </h6>
                         <p>
                           Répondez au formulaire de la page d'accueil. En nous
-                          faisant par d'un maximum d'informations, nous serons
-                          en mesure de vous trouver le voyage le plus adapté a
+                          faisant part d'un maximum d'informations, nous serons
+                          en mesure de vous trouver le voyage le plus adapté à
                           vos envies.
                         </p>
                       </div>
@@ -68,7 +68,7 @@ export default class presentation extends React.Component {
                     <div className="flex gap-8">
                       <div>
                         <h6 className="text-2xl font-bold">
-                          Decouvrez nos solutions de voyages
+                          Découvrez nos solutions de voyages
                         </h6>
                         <p>
                           Choisissez votre destination ainsi que votre moyen de
@@ -158,12 +158,12 @@ export default class presentation extends React.Component {
                     <div className="flex gap-8 flex-row-reverse">
                       <div>
                         <h6 className="text-2xl font-bold">
-                          Selectionnez le voyage le plus adapté
+                          Sélectionnez le voyage le plus adapté
                         </h6>
                         <p>
-                          Faites votre choix grâce a un large choix de
-                          destinations et modes de transports et partez en toute
-                          serenitée.
+                          Faites votre choix grâce à un large choix de
+                          destinations et modes de transport et partez en toute
+                          sérénité.
                         </p>
                       </div>
                       <div>
@@ -206,12 +206,12 @@ export default class presentation extends React.Component {
                     <div className="flex gap-8">
                       <div>
                         <h6 className="text-2xl font-bold">
-                          Sauvegardez et accedez au bilan de votre voyage
+                          Sauvegardez et accédez au bilan de votre voyage
                         </h6>
                         <p>
                           En disposant d'un compte utilisateur, vous pouvez
-                          avoir acces, n'importe où, à vos voyages sauvegardés
-                          et vos voyages plannifiés en detail.
+                          avoir accès, n'importe où, à vos voyages sauvegardés
+                          et vos voyages plannifiés en détail.
                         </p>
                       </div>
                       <div>
@@ -420,8 +420,8 @@ export default class presentation extends React.Component {
                   </svg>
                   <h3 className="font-bold">Un bilan personnalisé</h3>
                   <p className="text-sm text-gray-600">
-                    Un bilan de votre recherche vous sera proposé a la fin de
-                    votre recherche afin que vous puissiez acceder au detail de
+                    Un bilan de votre recherche vous sera proposé à la fin de
+                    votre recherche afin que vous puissiez accéder au détail de
                     votre voyage.
                   </p>
                 </div>
@@ -431,7 +431,7 @@ export default class presentation extends React.Component {
 
           <section className={styles.heroteam + " py-12 min-h-96"}>
             <h2 className="text-3xl font-bold text-center pb-5 text-white">
-              L'equipe HangOut
+              L'équipe HangOut
             </h2>
             <div className="grid px-4 gap-4 justify-center bg-black bg-opacity-50 container mx-auto max-w-4xl text-white rounded-xl">
               <div className="p-4 text-center">

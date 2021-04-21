@@ -4,10 +4,16 @@ import Link from "next/link";
 
 /**
  * Function Navbar_connect
+ * @return  {JSX.Element} the navbar when the user is connected
  */
 export default function Navbar_connect({ onDeconnect }) {
   const [open, setOpen] = useState(false);
 
+  /**
+   * Changes the styles of a element after a click
+   * @function
+   * @param {Event} e event on click
+   */
   const handleClick = (e) => {
     const tabs = document.getElementsByClassName("onglet");
     const blueBold = ["text-blue-600", "font-light"];
@@ -171,7 +177,7 @@ export default function Navbar_connect({ onDeconnect }) {
               <li className="px-2 py-2 flex gap-2 ml-4">
                 <Link href="/account">
                   <a>
-                    <button className="focus:outline-none flex-auto text-blue-600 px-4 py-2 font-bold border border-blue-600 flex gap-2 items-center rounded-xl ">
+                    <button className="focus:outline-none flex-auto text-blue-600 px-4 py-2 font-bold border hover:text-yellow-500 border-blue-600 hover:border-yellow-500 flex gap-2 items-center rounded-xl ">
                       <svg className="w-6 h-6" viewBox="0 0 24 24">
                         <path
                           fill="currentColor"

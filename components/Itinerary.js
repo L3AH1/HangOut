@@ -18,7 +18,8 @@ const itit = {
 const classNameRoadsheet = ["mt-2","h-0"];
 
 /**
- * Component that displays map and the itinerary
+ * Component that displays map and the itinerary by car
+ * @return {JSX.Element} all the details of the itinerary
  */
 class Itinerary extends React.Component {
   constructor(props) {
@@ -105,7 +106,7 @@ class Itinerary extends React.Component {
         .then((res) => res.json())
         .then((res) => {
           if (res.error) {
-            alert("Vous n'etes pas connecté 😯");
+            alert("Vous n'êtes pas connecté 😯");
           } else {
             alert("Votre voyage a bien été sauvegardé ! 😁");
           }
@@ -129,17 +130,16 @@ class Itinerary extends React.Component {
       arrivee: lien.get("to"),
     }
 
-    this.getData(data,0);
+    this.getData(data);
   }
 
   /**
    * Display the map
-   * @param {number} indexItinerary index of itinerary to be calculated
    * @param {Object} data parameters to the configuration of the itineraries
    */
-  getData = (data,indexItinerary= 0) => {
+  getData = (data) => {
     let confMap = {
-      container: document.getElementsByClassName("mapContainer")[indexItinerary],
+      container: document.getElementsByClassName("mapContainer")[0],
     };
     let callbacksMap = {
       onSuccess: () => {
@@ -182,13 +182,10 @@ class Itinerary extends React.Component {
       },
       roadsheet: document.getElementsByClassName("roadsheet")[indexItinerary],
       itit: this.state.typeItineraire,
-      //eviter les peage
       avoidTolls: this.state.eviterPeage,
       //propose alternative routes if it exist
       multipleIti: true,
       itiIdx: indexItinerary,
-      //préciser la date de départ sinon il prend automatiquement la date du jour
-      //date:this.state.date,
     };
     let callbacks = {
       onSuccess: (result) => {
@@ -200,7 +197,7 @@ class Itinerary extends React.Component {
           let iti = result.header.summaries[i];
           let t = iti.totalTime,
               h = Math.round(t / 3600),
-              m = Math.round((t % 3600) / 60),
+              m = Math.round((t % 3600) / 60).toString().padStart(2,"0"),
               name = " ",
               report = "";
           for (let j = 0; j < iti.names.length; j++) {
@@ -225,19 +222,19 @@ class Itinerary extends React.Component {
               m +
               "min</span></div>";
           report +=
-              "<div class='relative flex items-center justify-between'><p class='font-bold'>Cout total</p>" +
+              "<div class='relative flex items-center justify-between'><p class='font-bold'>Coût total</p>" +
               "<span class='float-right'>" +
               (iti.consumption + iti.tollCost.car / 100).toFixed(2) +
               "€</span></div>";
           report +=
-              "<div class='relative flex items-center justify-between'><p class='font-bold'>Cout Carburant</p>" +
+              "<div class='relative flex items-center justify-between'><p class='font-bold'>Coût carburant</p>" +
               "<span class='float-right'>" +
-              iti.consumption +
+              iti.consumption.toFixed(2) +
               "€</span></div>";
           report +=
-              "<div class='relative flex items-center justify-between'><p class='font-bold'>Cout Peage</p>" +
+              "<div class='relative flex items-center justify-between'><p class='font-bold'>Coût péage</p>" +
               "<span class='float-right'>" +
-              iti.tollCost.car / 100 +
+              (iti.tollCost.car / 100).toFixed(2) +
               "€</span></div>";
           output[i].innerHTML = report;
 
@@ -281,7 +278,7 @@ class Itinerary extends React.Component {
           <div key={index} className="container max-w-4xl mx-auto px-4 h-full flex flex-col items-center cursor-default">
             <div className="relative">
               <div className="rounded-2xl px-2 bg-white border border-solid shadow-md">
-                <div className="px-4 pt-8  mb-4">
+                <div className="px-4 pt-8 mb-4">
                   <div className="flex gap-8 flex-row-reverse flex items-center pr-56"/>
                   <div>
                     <pre className="bilanItineraire"/>
@@ -291,14 +288,16 @@ class Itinerary extends React.Component {
                       {this.state.isRoadsheetOpen  === index ? "Fermer" : "Voir les détails"}
                     </p>
                   </div>
-                  <div className="group bg-green-200 my-3 rounded-xl hover:bg-green-500"
-                          onClick={this.saveData}>
-                    <a>
-                      <p className="font-bold text-green-500 text-lg text-center py-2 group-hover:text-white">
-                        Sauvegarder
-                      </p>
-                    </a>
-                  </div>
+                  <div classname="text-center">
+                        <button
+                          className="group bg-green-200 my-3 rounded-xl hover:bg-green-500 px-20"
+                          onClick={this.saveData}
+                        >
+                          <p className="font-bold text-green-500 text-lg text-center py-2 group-hover:text-white">
+                            Sauvegarder
+                          </p>
+                        </button>
+                      </div>
                 </div>
               </div>
             </div>
@@ -343,7 +342,7 @@ class Itinerary extends React.Component {
               {bilanItineraire}
             </div>
 
-            <div id="feuilleDeRoute" >
+            <div id="feuilleDeRoute" className="bg-white">
               <div className="roadsheet overflow-auto px-5 h-0">
                 <p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
                   <i className="text-yellow-500 text-bold">
@@ -358,7 +357,7 @@ class Itinerary extends React.Component {
               </button>
             </div>
 
-            <div id="feuilleDeRoute" >
+            <div id="feuilleDeRoute" className="bg-white">
               <div className="roadsheet overflow-auto px-5 h-0">
                 <p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
                   <i className="text-yellow-500 text-bold">
@@ -374,8 +373,8 @@ class Itinerary extends React.Component {
             </div>
 
             <div id="feuilleDeRoute" >
-              <div className="roadsheet overflow-auto px-5 h-0">
-                <p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
+              <div className="roadsheet overflow-auto px-5 h-0 flex bg-white">
+                <p className="pt-7 pb-5 font-bold text-3xl text-blue-500 flex-1">Voici les détails de votre itineraire via
                   <i className="text-yellow-500 text-bold">
                     {this.state.itinerary.length > 2 && " " +  this.state.itinerary[2].names.join(" ")}
                   </i> :

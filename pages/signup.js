@@ -64,7 +64,7 @@ export default function signup() {
      * Check if the user fill all the fields
      */
     if (!username || !email || !password1 || !password2) {
-      alert("Veuillez remplir tout les champs 😄");
+      alert("Veuillez remplir tous les champs 😄");
       return;
     }
 
@@ -121,11 +121,10 @@ export default function signup() {
           if (res.errorName === "EMAIL_ALREADY_USED") {
             alert("Adresse email déja utilisée");
           }
-        } 
+        } else {
         /**
          * Telle to the user he is registred and redirect him into the signin page
          */
-        else {
           alert(
             "Bravo ! Vous êtes inscrit 🤗 \nConnectez-vous maintenant ! 😉"
           );

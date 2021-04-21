@@ -38,32 +38,30 @@ import style from "../styles/Home.module.css";
 import Cookies from "js-cookie";
 /**-------------------------------------------------------------------------------*
  *                                                                                *
- * Classe HJourneyTrain                                                           *
- * Gère l'affichage du voyage en train choisi par l'utilisateur                   *
+ * Class HJourneyTrain                                                            *
+ * Display result for the train journeys                                          *
  *                                                                                *
  * -------------------------------------------------------------------------------*
  */
-
 export default class JourneyTrain extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       journey: "",
-      cout: [],
-      coutTotal: 0,
+      cost: [],
+      totalCost: 0,
     };
   }
   /**
-   * Fonction getData()
-   * @param {données recupérées de l'url qui permette de refaire la même requête que celle choisie sur la 2e page} data
-   * Envoie la requête à Navitia et à la Sncf et récupère les données formattées
+   * Get data from Navitia's request
+   * @param {Object} data
    */
   getData(data) {
     const API_KEY = "d7257033-908e-4678-9909-f9ac7fa6009a";
     const API_URL = "https://api.sncf.com/v1/coverage/sncf/";
     const depart = data.depart.split(" (")[0];
     const arrivee = data.arrivee.split(" (")[0];
-    //Recupération des id des villes demandées pour effectuer la requête vers Navitia
+    //ID of the DepartureCity and ArrivalCity
     var departID = "";
     var arriveeID = "";
 
@@ -71,7 +69,7 @@ export default class JourneyTrain extends React.Component {
       if (key == depart) departID = VILLES[key].id;
       if (key == arrivee) arriveeID = VILLES[key].id;
     }
-    //On formatte la date pour pouvoir l'utiliser et recupérer le bon trajet
+    //Date formatting
     const datatime =
       data.date.substr(6, 4) +
       data.date.substr(3, 2) +
@@ -81,7 +79,7 @@ export default class JourneyTrain extends React.Component {
       data.date.substr(14, 2) +
       "00";
 
-    //Requête Navitia
+    //Navitia's request
     fetch(
       `${API_URL}journeys?from=${departID}&amp;to=${arriveeID}&amp;key=${API_KEY}&amp;datetime=${datatime}&amp;`,
       { method: "GET" }
@@ -89,24 +87,23 @@ export default class JourneyTrain extends React.Component {
       .then((response) => response.json())
       .then((response) => {
         var responseFormatted = formatData(response);
-        var coutArray = coutAPISncf(responseFormatted);
-        //Une fois le voyage obtenu on recherche le cout des différentes étapes via la Sncf
-        for (var i = 0; i &lt; coutArray.length; i++) {
-          if (coutArray[i].id != 0) {
-            const idDepart = coutArray[i].id;
-            fetch(coutArray[i].url, { method: "GET" })
+        var costArray = coutAPISncf(responseFormatted);
+        //Once we get the Navita's response, we try to get the cost of the journey with the Sncf's API
+        for (var i = 0; i &lt; costArray.length; i++) {
+          if (costArray[i].id != 0) {
+            const idDeparture = costArray[i].id;
+            fetch(costArray[i].url, { method: "GET" })
               .then((response) => response.json())
               .then((response) => {
                 if (response.records[0] != undefined) {
-                  var coutFormate = formatJsonSncf(response);
-                  var coutPlein = coutFormate.costPlein + this.state.coutTotal;
-                  this.state.cout[idDepart] = coutFormate;
+                  var formatedCost = formatJsonSncf(response);
+                  var fullCost = formatedCost.costPlein + this.state.totalCost;
+                  this.state.cost[idDeparture] = formatedCost;
                   this.setState({
-                    coutTotal: coutPlein,
+                    totalCost: fullCost,
                   });
-                  console.log("cout", this.state.cout);
                 } else {
-                  this.state.cout[idDepart] = { costPlein: "ND" };
+                  this.state.cost[idDeparture] = { costPlein: "ND" };
                   this.setState({});
                 }
               });
@@ -124,7 +121,7 @@ export default class JourneyTrain extends React.Component {
   componentDidMount() {
     const lien = new URLSearchParams(window.location.search);
     const data = {
-      //Recupération des données dans l'url
+      //Data's recovery from the url
       depart: lien.get("from"),
       arrivee: lien.get("to"),
       date: lien.get("datetime"),
@@ -153,12 +150,19 @@ export default class JourneyTrain extends React.Component {
       }),
       body: JSON.stringify(body),
     })
-      .then((res) => res.json());
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          alert("Vous n'êtes pas connecté 😯");
+        } else {
+          alert("Votre voyage a bien été sauvegardé ! 😁");
+        }
+      });
   }
 
   /**
-   * Fonction printStep, affichage d'une étape du voyage
-   * @param {objet contenant le résumé d'une étape du voyage choisi} step
+   * Displays step's itinerary
+   * @param {Object} step
    * @returns
    */
   printStep(step) {
@@ -191,8 +195,8 @@ export default class JourneyTrain extends React.Component {
             &lt;div className="flex justify-center col-span-2 pr-4">
               &lt;p className="flex italic font-extralight text-black pl-20 my-3">
                 Duree du trajet : {step.duree} (~{" "}
-                {this.state.cout[step.destinationDepart] != undefined
-                  ? this.state.cout[step.destinationDepart].costPlein
+                {this.state.cost[step.destinationDepart] != undefined
+                  ? this.state.cost[step.destinationDepart].costPlein
                   : " "}{" "}
                 €)
               &lt;/p>
@@ -223,7 +227,7 @@ export default class JourneyTrain extends React.Component {
 
         &lt;div>
           &lt;div className="container mx-auto relative flex items-center justify-between shadow-lg p-3">
-            &lt;h1 className="text-2xl font-bold text-blue-700">
+            &lt;h1 className="text-3xl font-bold text-blue-500">
               Votre itinéraire :{" "}
               {this.state.journey.destinationDepart != undefined
                 ? this.state.journey.destinationDepart.split(" (")[0]
@@ -390,12 +394,21 @@ export default class JourneyTrain extends React.Component {
           &lt;/div>
 
           &lt;section className={style.herotrain + " py-12 min-h-96"}>
+            &lt;div className="container max-w-4xl ml-auto pr-4 h-full flex flex-col gap-8">
+              &lt;div className="rounded-lg px-2 bg-gray-100 bg-opacity-90 border shadow-2xl self-end text-center flex">
+                &lt;img className="h-8 p-1" src="information.svg" />
+                &lt;p className="m-2 font-semibold text-gray-600">
+                  Les prix de trains indiqués ne proviennent
+                  &lt;br /> que d'un aperçu du coût et ne représentent
+                  &lt;br /> qu'une estimation du prix de votre voyage
+                &lt;/p>
+              &lt;/div>
+            &lt;/div>
             &lt;div className="flex items-center justify-between py-9 ">
               &lt;div className="container mx-auto px-4 h-full flex flex-col items-center gap-8">
                 &lt;div className="relative">
                   &lt;div className="rounded-lg px-2 bg-white border shadow-2xl">
                     &lt;div className="px-4 py-8 mb-4 ">
-                      {/* Affichage des différents itinéraire, moche mais ça marche*/}
                       {this.state.journey.itinerary != undefined
                         ? this.state.journey.itinerary[0] != undefined
                           ? this.printStep(this.state.journey.itinerary[0])
@@ -505,7 +518,7 @@ export default class JourneyTrain extends React.Component {
 
           &lt;section className={style.herotrainbilan + " pb-36"}>
             &lt;div className=" pt-7 ml-5">
-              &lt;p className="font-bold text-3xl text-blue-600">
+              &lt;p className="font-bold text-3xl text-blue-500">
                 Bilan de votre trajet :
               &lt;/p>
             &lt;/div>
@@ -525,7 +538,7 @@ export default class JourneyTrain extends React.Component {
                           &lt;p className="font-bold text-yellow-400 pr-2">
                             Cout :
                           &lt;/p>
-                          &lt;p> ~ {this.state.coutTotal} €&lt;/p>
+                          &lt;p> ~ {this.state.totalCost} €&lt;/p>
                         &lt;/div>
                         &lt;div className="flex">
                           &lt;p className="font-bold text-yellow-400 pr-2">
@@ -573,13 +586,13 @@ export default class JourneyTrain extends React.Component {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#formattageVille">formattageVille</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#citiesCoords">citiesCoords</a></li><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCityCoordsByName">findCityCoordsByName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#findDuration">findDuration</a></li><li><a href="global.html#formatData">formatData</a></li><li><a href="global.html#formatJsonSncf">formatJsonSncf</a></li><li><a href="global.html#formattingCity">formattingCity</a></li><li><a href="global.html#formattingDate">formattingDate</a></li><li><a href="global.html#formattingDuration">formattingDuration</a></li><li><a href="global.html#getcout">getcout</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getTravels">getTravels</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#requestViaMichelin">requestViaMichelin</a></li><li><a href="global.html#toCities">toCities</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 15:20:50 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Apr 19 2021 23:55:03 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

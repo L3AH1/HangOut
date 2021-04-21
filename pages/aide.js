@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Footer from "../components/Footer";
 import style from "../styles/Home.module.css";
 
-// Array of the differents questions and answers from the FAQ
 const QUESTIONS = [
   {
     question: "Comment sont calculés les itinéraires proposés ?",
@@ -23,11 +22,11 @@ const QUESTIONS = [
     answer: (
       <div>
         <p className="text-justify">
-          Les villes qui vont sont proposées font parties d'une sélection de
-          villes francaises, jugées idéales pour partir en vacances selon les
-          auteurs du site. Chacunes d'entre elles possèdent des avantages
-          propres, vous pouvez les consulter à tout moment lors de votre
-          recherche ou sur la page de propositions de destinations.
+          Les villes qui sont proposées font parties d'une sélection de villes
+          francaises, jugées idéales pour partir en vacances selon les auteurs
+          du site. Chacune d'entre elles possède des avantages propres, vous
+          pouvez les consulter à tout moment lors de votre recherche ou sur la
+          page de propositions de destinations.
         </p>
       </div>
     ),
@@ -53,7 +52,7 @@ const QUESTIONS = [
       <div>
         <p className="text-justify">
           HangOut met à votre disposition un compte utilisateur afin que vous
-          puissiez sauvegarder vos voyage planifiés et les retrouver jusqu'au
+          puissiez sauvegarder vos voyages planifiés et les retrouver jusqu'au
           jour de votre départ. Nous nous engageons, également, à respecter
           votre vie privée ainsi que les normes de confidentialité.
         </p>
@@ -89,7 +88,6 @@ const QUESTIONS = [
   },
 ];
 
-// Display of an arrow
 const Arrow = () => {
   return (
     <svg className="w-6 h-6" viewBox="0 0 24 24">
@@ -101,12 +99,6 @@ const Arrow = () => {
   );
 };
 
-/**
- * Expendable function
-* @param {question} question a question.
-* @param {answer} answer a answer.
-* @returns Display of a question and his answer in the FAQ.
-*/
 function Expandable({ question, answer }) {
   const [open, setOpen] = useState(false);
 
@@ -128,10 +120,6 @@ function Expandable({ question, answer }) {
   );
 }
 
-/**
- * FAQ function
- * @returns Display of the FAQ who contain all the questions and the answers
- */
 function FAQ() {
   return (
     <div className={style.herohelp + " pb-12"}>
@@ -150,9 +138,6 @@ function FAQ() {
   );
 }
 
-/**
- * Help page display class
- */
 export default class aide extends React.Component {
   render() {
     return (

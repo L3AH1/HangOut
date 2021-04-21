@@ -46,7 +46,8 @@ const itit = {
 const classNameRoadsheet = ["mt-2","h-0"];
 
 /**
- * Component that displays map and the itinerary
+ * Component that displays map and the itinerary by car
+ * @return {JSX.Element} all the details of the itinerary
  */
 class Itinerary extends React.Component {
   constructor(props) {
@@ -130,7 +131,14 @@ class Itinerary extends React.Component {
       }),
       body: JSON.stringify(body),
     })
-        .then((res) => res.json());
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.error) {
+            alert("Vous n'êtes pas connecté 😯");
+          } else {
+            alert("Votre voyage a bien été sauvegardé ! 😁");
+          }
+        });
   }
   /**
    * Gets the map and the itineraries after the render has been mounted
@@ -150,17 +158,16 @@ class Itinerary extends React.Component {
       arrivee: lien.get("to"),
     }
 
-    this.getData(data,0);
+    this.getData(data);
   }
 
   /**
    * Display the map
-   * @param {number} indexItinerary index of itinerary to be calculated
    * @param {Object} data parameters to the configuration of the itineraries
    */
-  getData = (data,indexItinerary= 0) => {
+  getData = (data) => {
     let confMap = {
-      container: document.getElementsByClassName("mapContainer")[indexItinerary],
+      container: document.getElementsByClassName("mapContainer")[0],
     };
     let callbacksMap = {
       onSuccess: () => {
@@ -203,13 +210,10 @@ class Itinerary extends React.Component {
       },
       roadsheet: document.getElementsByClassName("roadsheet")[indexItinerary],
       itit: this.state.typeItineraire,
-      //eviter les peage
       avoidTolls: this.state.eviterPeage,
       //propose alternative routes if it exist
       multipleIti: true,
       itiIdx: indexItinerary,
-      //préciser la date de départ sinon il prend automatiquement la date du jour
-      //date:this.state.date,
     };
     let callbacks = {
       onSuccess: (result) => {
@@ -221,7 +225,7 @@ class Itinerary extends React.Component {
           let iti = result.header.summaries[i];
           let t = iti.totalTime,
               h = Math.round(t / 3600),
-              m = Math.round((t % 3600) / 60),
+              m = Math.round((t % 3600) / 60).toString().padStart(2,"0"),
               name = " ",
               report = "";
           for (let j = 0; j &lt; iti.names.length; j++) {
@@ -246,19 +250,19 @@ class Itinerary extends React.Component {
               m +
               "min&lt;/span>&lt;/div>";
           report +=
-              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Cout total&lt;/p>" +
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Coût total&lt;/p>" +
               "&lt;span class='float-right'>" +
               (iti.consumption + iti.tollCost.car / 100).toFixed(2) +
               "€&lt;/span>&lt;/div>";
           report +=
-              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Cout Carburant&lt;/p>" +
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Coût carburant&lt;/p>" +
               "&lt;span class='float-right'>" +
-              iti.consumption +
+              iti.consumption.toFixed(2) +
               "€&lt;/span>&lt;/div>";
           report +=
-              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Cout Peage&lt;/p>" +
+              "&lt;div class='relative flex items-center justify-between'>&lt;p class='font-bold'>Coût péage&lt;/p>" +
               "&lt;span class='float-right'>" +
-              iti.tollCost.car / 100 +
+              (iti.tollCost.car / 100).toFixed(2) +
               "€&lt;/span>&lt;/div>";
           output[i].innerHTML = report;
 
@@ -395,8 +399,8 @@ class Itinerary extends React.Component {
             &lt;/div>
 
             &lt;div id="feuilleDeRoute" >
-              &lt;div className="roadsheet overflow-auto px-5 h-0">
-                &lt;p className="pt-7 pb-5 font-bold text-3xl text-blue-500">Voici les détails de votre itineraire via
+              &lt;div className="roadsheet overflow-auto px-5 h-0 flex bg-white">
+                &lt;p className="pt-7 pb-5 font-bold text-3xl text-blue-500 flex-1">Voici les détails de votre itineraire via
                   &lt;i className="text-yellow-500 text-bold">
                     {this.state.itinerary.length > 2 &amp;&amp; " " +  this.state.itinerary[2].names.join(" ")}
                   &lt;/i> :
@@ -426,13 +430,13 @@ export default Itinerary;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#formattageVille">formattageVille</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#citiesCoords">citiesCoords</a></li><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCityCoordsByName">findCityCoordsByName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#findDuration">findDuration</a></li><li><a href="global.html#formatData">formatData</a></li><li><a href="global.html#formatJsonSncf">formatJsonSncf</a></li><li><a href="global.html#formattingCity">formattingCity</a></li><li><a href="global.html#formattingDate">formattingDate</a></li><li><a href="global.html#formattingDuration">formattingDuration</a></li><li><a href="global.html#getcout">getcout</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getTravels">getTravels</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#requestViaMichelin">requestViaMichelin</a></li><li><a href="global.html#toCities">toCities</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 15:20:50 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Apr 19 2021 23:55:03 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

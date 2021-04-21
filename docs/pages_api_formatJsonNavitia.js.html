@@ -27,85 +27,75 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- *
- * @param data données résultats de la requête
- *
- * @returns données formattées et prêtes a être utilisé
+ * returns the useful data of Navitia request
+ * @param {Object }data request results 
+ * 
+ * @return {Object} formatted data that can be useful 
  */
 
-export default function formatData(data) {
-  const countJourneys = data.journeys[0].sections.length;
+ function formatData (data) {
 
-  const itinerary = new Array();
-  for (var i = 0; i &lt; countJourneys; i++) {
-    if (!(data.journeys[0].sections[i].type == "waiting")) {
-      itinerary[i] = {
-        destinationDepart: data.journeys[0].sections[i].from.name,
-        destinationArrivee: data.journeys[0].sections[i].to.name,
-        heureDepart: formattageDate(
-          data.journeys[0].sections[i].departure_date_time
-        ),
-        heureArrivee: formattageDate(
-          data.journeys[0].sections[i].arrival_date_time
-        ),
-        duree: formattageDuree(data.journeys[0].sections[i].duration),
-        waiting: false,
-      };
-    } else {
-      itinerary[i] = {
-        destinationDepart: "",
-        destinationArrivee: "",
-        heureDepart: formattageDate(
-          data.journeys[0].sections[i].departure_date_time
-        ),
-        heureArrivee: formattageDate(
-          data.journeys[0].sections[i].arrival_date_time
-        ),
-        duree: formattageDuree(data.journeys[0].sections[i].duration),
-        waiting: true,
-      };
-    }
-  }
+	const countJourneys = data.journeys[0].sections.length;
 
-  const usefulData = {
-    destinationDepart: data.journeys[0].sections[0].from.name,
-    destinationArrivee: data.journeys[0].sections[countJourneys - 1].to.name,
-    heureDepart: formattageDate(
-      data.journeys[0].sections[0].departure_date_time
-    ),
-    heureArrivee: formattageDate(
-      data.journeys[0].sections[countJourneys - 1].arrival_date_time
-    ),
-    duree: formattageDuree(data.journeys[0].duration),
-    itinerary: itinerary,
-  };
-  return JSON.parse(JSON.stringify(usefulData));
+	const itinerary = new Array();
+	for(var i=0;i&lt;countJourneys;i++) {
+
+		if(!(data.journeys[0].sections[i].type == "waiting")) {
+
+			// array of Navitia request results summurize al informations of the journey 
+			itinerary[i] = {
+				destinationDepart   : data.journeys[0].sections[i].from.name,
+				destinationArrivee  : data.journeys[0].sections[i].to.name,
+				heureDepart         : formattingDate(data.journeys[0].sections[i].departure_date_time),
+				heureArrivee        : formattingDate(data.journeys[0].sections[i].arrival_date_time),
+				duree               : formattingDuration(data.journeys[0].sections[i].duration),
+				waiting             : false,
+			}
+		} else {
+			itinerary[i] = {
+				destinationDepart   : "",
+				destinationArrivee  : "",
+				heureDepart         : formattingDate(data.journeys[0].sections[i].departure_date_time),
+				heureArrivee        : formattingDate(data.journeys[0].sections[i].arrival_date_time),
+				duree               : formattingDuration(data.journeys[0].sections[i].duration),
+				waiting             : true,
+			}
+		}
+	};
+
+	// complete data of Navitia request which will be returned as JSON  
+	const usefulData = {
+		destinationDepart   : data.journeys[0].sections[0].from.name,
+		destinationArrivee  : data.journeys[0].sections[countJourneys-1].to.name,
+		heureDepart         : formattingDate(data.journeys[0].sections[0].departure_date_time),
+		heureArrivee        : formattingDate(data.journeys[0].sections[countJourneys-1].arrival_date_time),
+		duree               : formattingDuration(data.journeys[0].duration),
+		itinerary           : itinerary,
+	};
+	return (JSON.parse(JSON.stringify(usefulData)));
 }
 
-function formattageDate(date) {
-  return (
-    date.substr(6, 2) +
-    "/" +
-    date.substr(4, 2) +
-    "/" +
-    date.substr(0, 4) +
-    "-" +
-    date.substr(9, 2) +
-    "h" +
-    date.substr(11, 2)
-  );
+/**
+ * returns the formatted date  
+ * @param {String}date date not formatted 
+ * 
+ * @return {String} formatted date ("JJ/MM/AAAA-HHhMM")
+ */
+function formattingDate(date) {
+	return date.substr(6,2) + "/" + date.substr(4,2) + "/" +  date.substr(0,4) + "-" + date.substr(9,2) + "h" + date.substr(11,2);
 }
 
-function formattageDuree(duree) {
-  return (
-    Math.trunc(duree / 3600) +
-    "h" +
-    Math.trunc((duree % 3600) / 60)
-      .toString()
-      .padStart(2, "0")
-  );
+/**
+ * returns the formatted duration of Navitia request 
+ * @param {String}duree  duration not formatted 
+ * 
+ * @returns {String} formatted duration ("HhMM")
+ */
+
+function formattingDuration(duree) {
+	return Math.trunc(duree/3600) + "h" + Math.trunc(duree%3600/60).toString().padStart(2,"0")
 }
-</code></pre>
+export default formatData; </code></pre>
         </article>
     </section>
 
@@ -115,13 +105,13 @@ function formattageDuree(duree) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#formattageVille">formattageVille</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Autocomplete.html">Autocomplete</a></li><li><a href="HDestination.html">HDestination</a></li><li><a href="Itinerary.html">Itinerary</a></li><li><a href="module.html#.exports">exports</a></li><li><a href="Search.html">Search</a></li></ul><h3>Global</h3><ul><li><a href="global.html#citiesCoords">citiesCoords</a></li><li><a href="global.html#filterTwoArrays">filterTwoArrays</a></li><li><a href="global.html#filterTwoArraysCoords">filterTwoArraysCoords</a></li><li><a href="global.html#findCityByCoords">findCityByCoords</a></li><li><a href="global.html#findCitybyEnvie">findCitybyEnvie</a></li><li><a href="global.html#findCitybyEnvironnement">findCitybyEnvironnement</a></li><li><a href="global.html#findCitybyName">findCitybyName</a></li><li><a href="global.html#findCityCoordsByName">findCityCoordsByName</a></li><li><a href="global.html#findCoordsbyEnvie">findCoordsbyEnvie</a></li><li><a href="global.html#findCoordsbyEnvironnement">findCoordsbyEnvironnement</a></li><li><a href="global.html#findDuration">findDuration</a></li><li><a href="global.html#formatData">formatData</a></li><li><a href="global.html#formatJsonSncf">formatJsonSncf</a></li><li><a href="global.html#formattingCity">formattingCity</a></li><li><a href="global.html#formattingDate">formattingDate</a></li><li><a href="global.html#formattingDuration">formattingDuration</a></li><li><a href="global.html#getcout">getcout</a></li><li><a href="global.html#getData">getData</a></li><li><a href="global.html#getTravels">getTravels</a></li><li><a href="global.html#itit">itit</a></li><li><a href="global.html#printStep">printStep</a></li><li><a href="global.html#requestViaMichelin">requestViaMichelin</a></li><li><a href="global.html#toCities">toCities</a></li><li><a href="global.html#VILLES">VILLES</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 15:20:50 GMT+0200 (heure d’été d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Apr 19 2021 23:55:03 GMT+0200 (heure d’été d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>
